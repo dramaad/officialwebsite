@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { 
-  Radar, Search, Layers, Zap, TrendingUp, Play, Globe, CheckCircle, 
+  Layers, TrendingUp, Play, Globe, CheckCircle, 
   BarChart3, ArrowUp, ArrowDown, Copy, Sparkles, Clock, GripVertical,
   MessageSquare, Bot, ChevronRight, Pause
 } from 'lucide-react';
@@ -363,7 +363,7 @@ function GenerativeScaleDemo() {
 
 function AutoOptimizeDemo() {
   const [deployProgress, setDeployProgress] = useState(0);
-  const [isDeploying, setIsDeploying] = useState(true);
+  const [isDeploying] = useState(true);
 
   useEffect(() => {
     if (isDeploying && deployProgress < 100) {

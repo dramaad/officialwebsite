@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
 interface LogoIntroProps {
@@ -6,7 +6,6 @@ interface LogoIntroProps {
 }
 
 export function LogoIntro({ onComplete }: LogoIntroProps) {
-  const [phase, setPhase] = useState<'ignite' | 'visible' | 'exit'>('ignite');
   const containerRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
@@ -38,10 +37,8 @@ export function LogoIntro({ onComplete }: LogoIntroProps) {
         { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
         '-=0.3'
       )
-      .add(() => setPhase('visible'))
       // Hold for a moment
       .to({}, { duration: 0.8 })
-      .add(() => setPhase('exit'))
       // Exit: Logo flies to top-left corner
       .to(
         logoRef.current,
