@@ -34,8 +34,8 @@ const testimonials = [
 function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] }) {
   return (
     <div
-      className="flex-shrink-0 card-dark p-6 mx-3 hover:border-orange-500/30 transition-colors duration-300 flex flex-col min-h-[280px] w-[340px] md:w-[400px]"
-      style={{ minHeight: 280 }}
+      className="flex-shrink-0 card-dark p-6 mx-3 hover:border-orange-500/30 transition-colors duration-300 flex flex-col min-h-[320px] w-[340px] md:w-[400px]"
+      style={{ minHeight: 320 }}
     >
       {/* Tag */}
       <div className="mb-4">
@@ -44,8 +44,8 @@ function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] 
         </span>
       </div>
 
-      {/* Quote - flex-1 so author block is pushed to bottom */}
-      <p className="text-gray-300 text-sm leading-relaxed flex-1 line-clamp-5">
+      {/* Quote - more height so full text visible, no line-clamp */}
+      <p className="text-gray-300 text-sm leading-relaxed flex-1 min-h-[140px]">
         "{testimonial.quote}"
       </p>
 

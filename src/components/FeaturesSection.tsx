@@ -99,7 +99,7 @@ function CreativeRadarDemo() {
 
       {activeTab === 'competitors' && (
         <div className="space-y-2">
-          <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-2">Creative strategies (format & insight, no brand names)</p>
+          <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-3 pb-1">Creative strategies (format & insight, no brand names)</p>
           {competitors.map((c, i) => (
             <div key={i} className="p-3 rounded-lg bg-white/[0.02] border border-white/5">
               <div className="flex items-center justify-between mb-1.5">
@@ -152,13 +152,18 @@ function CreativeRadarDemo() {
 }
 
 // ——— Content Decoding ———
-// Single agentic flow: natural language command → agent runs → timeline shows result + high-retention moments.
+// Flow: dialog box → cycling example text (no exposed prompt) → AI thinking + High retention moments → 剪映-style multi-track timeline.
+const CONTENT_DECODE_EXAMPLES = [
+  'Turn our product demo into Facebook ads',
+  'Turn this gameplay into UGC-style ads for Tik Tok with dinosaur avatar and voice over',
+];
+
 function ContentDecodingDemo() {
-  const [prompt, setPrompt] = useState('');
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [showResult, setShowResult] = useState(false);
+  const [phase, setPhase] = useState<'input' | 'cycling' | 'thinking' | 'timeline'>('input');
+  const [cycleIndex, setCycleIndex] = useState(0);
   const [clipStart, setClipStart] = useState(20);
-  const [clipEnd, setClipEnd] = useState(65);
+  const [clipEnd, setClipEnd] = useState(55);
+  const [showMoments, setShowMoments] = useState(0);
   const [isDragging, setIsDragging] = useState<'left' | 'right' | null>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
@@ -169,20 +174,47 @@ function ContentDecodingDemo() {
     { time: '00:48', label: 'CTA' },
   ];
 
-  const handleSubmit = () => {
-    if (!prompt.trim()) return;
-    setIsProcessing(true);
-    setShowResult(false);
-    setTimeout(() => {
-      setIsProcessing(false);
-      setShowResult(true);
-      setClipStart(9);
-      setClipEnd(42);
-    }, 1800);
-  };
+  // Auto flow: show box → cycle examples → thinking + moments → timeline
+  useEffect(() => {
+    if (phase === 'input') {
+      const t = setTimeout(() => setPhase('cycling'), 600);
+      return () => clearTimeout(t);
+    }
+    if (phase === 'cycling') {
+      const t = setInterval(() => setCycleIndex((i) => (i + 1) % 2), 2800);
+      const done = setTimeout(() => {
+        setPhase('thinking');
+      }, 6000);
+      return () => {
+        clearInterval(t);
+        clearTimeout(done);
+      };
+    }
+    if (phase === 'thinking') {
+      const t = setTimeout(() => setShowMoments(1), 400);
+      const t2 = setTimeout(() => setShowMoments(2), 700);
+      const t3 = setTimeout(() => setShowMoments(3), 1000);
+      const t4 = setTimeout(() => setShowMoments(4), 1300);
+      const toTimeline = setTimeout(() => setPhase('timeline'), 2200);
+      return () => {
+        clearTimeout(t);
+        clearTimeout(t2);
+        clearTimeout(t3);
+        clearTimeout(t4);
+        clearTimeout(toTimeline);
+      };
+    }
+    if (phase === 'timeline') {
+      const reset = setTimeout(() => {
+        setPhase('input');
+        setShowMoments(0);
+      }, 12000);
+      return () => clearTimeout(reset);
+    }
+  }, [phase]);
 
   const handleTrackMouse = (e: React.MouseEvent) => {
-    if (!trackRef.current || !isDragging) return;
+    if (!trackRef.current || !isDragging || phase !== 'timeline') return;
     const rect = trackRef.current.getBoundingClientRect();
     const pct = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
     if (isDragging === 'left') setClipStart(Math.min(pct, clipEnd - 8));
@@ -196,74 +228,102 @@ function ContentDecodingDemo() {
       onMouseUp={() => setIsDragging(null)}
       onMouseLeave={() => setIsDragging(null)}
     >
-      {/* 1. Natural language input */}
       <p className="text-[10px] text-gray-500 mb-2">Describe the change. We map it to timeline operations.</p>
+
+      {/* 1. Dialog box — no user prompt visible; placeholder or cycling example only */}
       <div className="relative mb-4">
-        <input
-          type="text"
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-          placeholder="Cut this down to 30s."
-          className="w-full bg-black border border-white/10 rounded-xl pl-4 pr-11 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/40 transition-colors"
-        />
-        <button onClick={handleSubmit} className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-orange-400 transition-colors">
+        <div className="w-full bg-black border border-white/10 rounded-xl pl-4 pr-11 py-3 text-sm text-white min-h-[48px] flex items-center">
+          {phase === 'input' && <span className="text-gray-500">Describe the change...</span>}
+          {phase === 'cycling' && (
+            <span className="text-gray-300 truncate block overflow-hidden text-ellipsis">
+              {CONTENT_DECODE_EXAMPLES[cycleIndex]}
+            </span>
+          )}
+          {(phase === 'thinking' || phase === 'timeline') && (
+            <span className="text-gray-500">Describe the change...</span>
+          )}
+        </div>
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-gray-500">
           <Send className="w-4 h-4" />
-        </button>
+        </div>
       </div>
 
-      {/* 2. Agent status (single line) */}
-      <div className="flex items-center gap-2 mb-4">
-        <div className="w-6 h-6 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
-          <Bot className="w-3 h-3 text-orange-400" />
-        </div>
-        {isProcessing && (
-          <>
-            <div className="w-3 h-3 border border-orange-500 border-t-transparent rounded-full animate-spin" />
-            <span className="text-xs text-gray-400">Analyzing… trimming to best segment</span>
-          </>
-        )}
-        {showResult && !isProcessing && (
-          <span className="text-xs text-orange-400">Trimmed 0:12–0:42. Cliffhanger at 0:28.</span>
-        )}
-        {!isProcessing && !showResult && (
-          <span className="text-xs text-gray-500">Send a command to run.</span>
-        )}
-      </div>
-
-      {/* 3. Single timeline: waveform + selection + draggable handles */}
-      <div className="mb-4">
-        <div className="flex justify-between text-[9px] text-gray-500 mb-1">
-          <span>00:00</span>
-          <span>01:00</span>
-        </div>
-        <div ref={trackRef} className="relative h-12 bg-black rounded-lg border border-white/5 overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-around px-1">
-            {[...Array(50)].map((_, i) => (
-              <div key={i} className="flex-1 mx-px bg-gray-600 rounded-full max-w-[3px]" style={{ height: `${25 + Math.sin(i * 0.35) * 45}%` }} />
+      {/* 2. AI thinking + High retention moments (appear in order) */}
+      {(phase === 'thinking' || phase === 'timeline') && (
+        <>
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-6 h-6 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
+              <Bot className="w-3 h-3 text-orange-400" />
+            </div>
+            {phase === 'thinking' && (
+              <>
+                <div className="w-3 h-3 border border-orange-500 border-t-transparent rounded-full animate-spin" />
+                <span className="text-xs text-gray-400">Analyzing…</span>
+              </>
+            )}
+            {phase === 'timeline' && (
+              <span className="text-xs text-orange-400">Trimmed 0:12–0:42. Cliffhanger at 0:28.</span>
+            )}
+          </div>
+          <div className="space-y-1 mb-4">
+            <p className="text-[9px] text-gray-500 uppercase tracking-wider mb-1.5">High retention moments</p>
+            {moments.map((m, i) => (
+              <div
+                key={i}
+                className={`flex items-center gap-2 py-1.5 px-2 rounded bg-white/[0.02] border border-white/5 transition-all duration-300 ${
+                  showMoments > i ? 'opacity-100' : 'opacity-0'
+                }`}
+              >
+                <div className="w-1 h-4 rounded-full bg-orange-500/80 flex-shrink-0" />
+                <span className="text-[10px] text-gray-300">{m.time} {m.label}</span>
+                <ChevronRight className="w-3 h-3 text-gray-600 ml-auto" />
+              </div>
             ))}
           </div>
-          <div className="absolute top-0 bottom-0 bg-orange-500/15 border-l border-r border-orange-500/50 pointer-events-none" style={{ left: `${clipStart}%`, width: `${clipEnd - clipStart}%` }} />
-          <div className="absolute top-0 bottom-0 w-1.5 bg-white/90 cursor-ew-resize z-10 hover:bg-orange-400 rounded-sm" style={{ left: `${clipStart}%` }} onMouseDown={() => setIsDragging('left')}>
-            <GripVertical className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 text-gray-800" />
+        </>
+      )}
+
+      {/* 3. 剪映-style multi-track timeline (only when phase === 'timeline') */}
+      {phase === 'timeline' && (
+        <div className="mb-0">
+          <div className="flex justify-between text-[9px] text-gray-500 mb-1">
+            <span>00:00</span>
+            <span>00:30</span>
           </div>
-          <div className="absolute top-0 bottom-0 w-1.5 bg-white/90 cursor-ew-resize z-10 hover:bg-orange-400 rounded-sm" style={{ left: `${clipEnd}%` }} onMouseDown={() => setIsDragging('right')}>
-            <GripVertical className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 text-gray-800" />
+          <div ref={trackRef} className="relative rounded-lg overflow-hidden border border-white/5 bg-black">
+            <div className="flex flex-col">
+              <div className="h-6 flex items-center gap-2 px-2 border-b border-white/5">
+                <span className="text-[8px] text-gray-500 w-12">Video</span>
+                <div className="flex-1 h-4 rounded bg-gray-700/80" style={{ width: '92%' }} />
+              </div>
+              <div className="h-6 flex items-center gap-2 px-2 border-b border-white/5">
+                <span className="text-[8px] text-gray-500 w-12">Avatar</span>
+                <div className="h-4 rounded bg-orange-900/40 flex-shrink-0" style={{ width: '25%' }} />
+              </div>
+              <div className="h-6 flex items-center gap-2 px-2 border-b border-white/5">
+                <span className="text-[8px] text-gray-500 w-12">Subs</span>
+                <div className="flex-1 h-4 rounded bg-gray-600/60" style={{ width: '90%' }} />
+              </div>
+              <div className="h-7 flex items-center gap-2 px-2">
+                <span className="text-[8px] text-gray-500 w-12">Wave</span>
+                <div className="flex-1 flex items-center px-0.5">
+                  {[...Array(45)].map((_, i) => (
+                    <div key={i} className="flex-1 mx-px bg-gray-600 rounded-full max-w-[2px]" style={{ height: `${20 + Math.sin(i * 0.4) * 50}%` }} />
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="absolute top-0 bottom-0 bg-orange-500/15 border-l border-r border-orange-500/50 pointer-events-none" style={{ left: `${clipStart}%`, width: `${clipEnd - clipStart}%` }} />
+            <div className="absolute top-0 bottom-0 w-0.5 bg-white pointer-events-none" style={{ left: '35%' }} />
+            <div className="absolute top-0 bottom-0 w-1.5 bg-white/90 cursor-ew-resize z-10 hover:bg-orange-400 rounded-sm" style={{ left: `${clipStart}%` }} onMouseDown={() => setIsDragging('left')}>
+              <GripVertical className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 text-gray-800" />
+            </div>
+            <div className="absolute top-0 bottom-0 w-1.5 bg-white/90 cursor-ew-resize z-10 hover:bg-orange-400 rounded-sm" style={{ left: `${clipEnd}%` }} onMouseDown={() => setIsDragging('right')}>
+              <GripVertical className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 text-gray-800" />
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* 4. AI-detected high retention moments */}
-      <div className="space-y-1">
-        <p className="text-[9px] text-gray-500 uppercase tracking-wider mb-1.5">High retention moments</p>
-        {moments.map((m, i) => (
-          <div key={i} className="flex items-center gap-2 py-1.5 px-2 rounded bg-white/[0.02] border border-white/5">
-            <div className="w-1 h-4 rounded-full bg-orange-500/80 flex-shrink-0" />
-            <span className="text-[10px] text-gray-300">{m.time} {m.label}</span>
-            <ChevronRight className="w-3 h-3 text-gray-600 ml-auto" />
-          </div>
-        ))}
-      </div>
+      )}
     </div>
   );
 }
@@ -300,7 +360,7 @@ function GenerativeScaleDemo() {
           <Layers className="w-4 h-4 text-orange-400" />
           <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">Batch production</span>
         </div>
-        <span className="text-xs font-mono text-orange-400">{progress}%</span>
+        <span className="text-xs font-mono text-orange-400">{Math.round(progress)}%</span>
       </div>
 
       <div className="h-1.5 bg-white/5 rounded-full mb-4 overflow-hidden">
@@ -339,20 +399,36 @@ function GenerativeScaleDemo() {
             <span className="font-medium text-white">{total}</span>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-1.5 flex-1 min-w-0">
-          {[
-            { ratio: '9/16', label: '9:16' },
-            { ratio: '9/16', label: '9:16' },
-            { ratio: '1/1', label: '1:1' },
-            { ratio: '9/16', label: '9:16' },
-            { ratio: '16/9', label: '16:9' },
-            { ratio: '9/16', label: '9:16' },
-          ].map((item, i) => (
-            <div key={i} className={`rounded border flex flex-col items-center justify-center transition-all ${progress > (i + 1) * 15 ? 'border-orange-500/30 bg-orange-500/5' : 'border-white/5 bg-black/50'}`} style={{ aspectRatio: item.ratio }}>
-              <Play className={`w-3 h-3 ${progress > (i + 1) * 15 ? 'text-orange-400' : 'text-gray-700'}`} />
-              {progress > (i + 1) * 15 && <span className="text-[8px] text-gray-500 mt-0.5">{item.label}</span>}
-            </div>
-          ))}
+        {/* Row 1: 1:1 only. Row 2: 9:16 only. Appear one by one. */}
+        <div className="flex-1 min-w-0 flex flex-col gap-2">
+          <div className="grid grid-cols-2 gap-2">
+            {[1, 2].map((i) => (
+              <div
+                key={i}
+                className={`rounded border flex flex-col items-center justify-center transition-all duration-300 ${
+                  progress > 15 + i * 12 ? 'border-orange-500/30 bg-orange-500/5 opacity-100' : 'border-white/5 bg-black/50 opacity-40'
+                }`}
+                style={{ aspectRatio: '1/1' }}
+              >
+                <Play className={`w-3 h-3 ${progress > 15 + i * 12 ? 'text-orange-400' : 'text-gray-700'}`} />
+                {progress > 15 + i * 12 && <span className="text-[8px] text-gray-500 mt-0.5">1:1</span>}
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-4 gap-1.5">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className={`rounded border flex flex-col items-center justify-center transition-all duration-300 ${
+                  progress > 45 + i * 12 ? 'border-orange-500/30 bg-orange-500/5 opacity-100' : 'border-white/5 bg-black/50 opacity-40'
+                }`}
+                style={{ aspectRatio: '9/16' }}
+              >
+                <Play className={`w-3 h-3 ${progress > 45 + i * 12 ? 'text-orange-400' : 'text-gray-700'}`} />
+                {progress > 45 + i * 12 && <span className="text-[8px] text-gray-500 mt-0.5">9:16</span>}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -360,10 +436,11 @@ function GenerativeScaleDemo() {
 }
 
 // ——— Auto Launch & Optimize ———
-// Dashboard: KPIs, campaign list, Campaign Agent sidebar, AI Insights cards, Ask the agent.
+// Right panel: agent content animates in one by one.
 function AutoOptimizeDemo() {
   const [deployProgress, setDeployProgress] = useState(0);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [agentVisible, setAgentVisible] = useState(0); // 0=hide, 1=header, 2=status, 3=label, 4,5,6=cards, 7=input
 
   useEffect(() => {
     if (deployProgress < 100) {
@@ -378,10 +455,18 @@ function AutoOptimizeDemo() {
       const reset = setTimeout(() => {
         setDeployProgress(0);
         setShowDashboard(false);
-      }, 5500);
+        setAgentVisible(0);
+      }, 8000);
       return () => clearTimeout(reset);
     }
   }, [deployProgress]);
+
+  useEffect(() => {
+    if (!showDashboard) return;
+    const delays = [0, 200, 450, 700, 950, 1200, 1450, 1700];
+    const timers = delays.map((d, i) => setTimeout(() => setAgentVisible(i + 1), d));
+    return () => timers.forEach(clearTimeout);
+  }, [showDashboard]);
 
   const kpis = [
     { label: 'Budget', value: '$141k' },
@@ -401,7 +486,6 @@ function AutoOptimizeDemo() {
   return (
     <div className="bg-[#0d0d0d] rounded-xl border border-white/[0.06] p-5 h-full shadow-xl shadow-black/20 flex flex-col min-h-0">
       <div className="flex gap-4 flex-1 min-h-0">
-        {/* Left: Campaign dashboard */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-3">
             <div>
@@ -424,7 +508,6 @@ function AutoOptimizeDemo() {
 
           {showDashboard && (
             <>
-              {/* KPIs */}
               <div className="grid grid-cols-3 gap-1.5 mb-3">
                 {kpis.map((k, i) => (
                   <div key={i} className="p-2 rounded-lg bg-white/[0.03] border border-white/5">
@@ -433,7 +516,6 @@ function AutoOptimizeDemo() {
                   </div>
                 ))}
               </div>
-              {/* Campaign list */}
               <div className="space-y-1.5 mb-2">
                 {['Q1 Short-form', 'Holiday Push', 'Retargeting'].map((name, i) => (
                   <div key={i} className="flex items-center justify-between py-2 px-2 rounded-lg bg-white/[0.02] border border-white/5">
@@ -447,36 +529,45 @@ function AutoOptimizeDemo() {
           )}
         </div>
 
-        {/* Right: Campaign Agent + AI Insights */}
         <div className="w-[52%] flex-shrink-0 border-l border-white/5 pl-3 flex flex-col min-w-0">
-          <div className="mb-2">
-            <p className="text-xs font-medium text-white flex items-center gap-1.5">
-              <MessageSquare className="w-3.5 h-3.5 text-orange-400" />
-              Campaign Agent
-            </p>
-            <p className="text-[9px] text-gray-500">AI-powered optimization</p>
-            <p className="text-[9px] text-green-400 mt-0.5 flex items-center gap-1">
-              <span className="w-1 h-1 rounded-full bg-green-500 animate-pulse" />
-              Auto-Pilot Active · Monitoring 5 campaigns
-            </p>
-          </div>
+          {agentVisible >= 1 && (
+            <div className="mb-2 animate-fade-in">
+              <p className="text-xs font-medium text-white flex items-center gap-1.5">
+                <MessageSquare className="w-3.5 h-3.5 text-orange-400" />
+                Campaign Agent
+              </p>
+            </div>
+          )}
+          {agentVisible >= 2 && (
+            <div className="mb-2 animate-fade-in">
+              <p className="text-[9px] text-gray-500">AI-powered optimization</p>
+              <p className="text-[9px] text-green-400 mt-0.5 flex items-center gap-1">
+                <span className="w-1 h-1 rounded-full bg-green-500 animate-pulse" />
+                Auto-Pilot Active · Monitoring 5 campaigns
+              </p>
+            </div>
+          )}
           <div className="flex-1 min-h-0 overflow-auto space-y-2">
-            <p className="text-[9px] text-gray-500 uppercase">AI Insights (5)</p>
-            {insights.map((ins, i) => (
-              <div key={i} className="p-2 rounded-lg bg-white/[0.03] border border-white/5">
-                <p className="text-[10px] font-medium text-white mb-0.5">{ins.title}</p>
-                <p className="text-[9px] text-gray-400 mb-1.5">{ins.text}</p>
-                <button className="text-[9px] text-orange-400 hover:underline">{ins.action}</button>
-              </div>
-            ))}
+            {agentVisible >= 3 && <p className="text-[9px] text-gray-500 uppercase animate-fade-in">AI Insights (5)</p>}
+            {insights.map((ins, i) =>
+              agentVisible >= 4 + i ? (
+                <div key={i} className="p-2 rounded-lg bg-white/[0.03] border border-white/5 animate-fade-in">
+                  <p className="text-[10px] font-medium text-white mb-0.5">{ins.title}</p>
+                  <p className="text-[9px] text-gray-400 mb-1.5">{ins.text}</p>
+                  <button className="text-[9px] text-orange-400 hover:underline">{ins.action}</button>
+                </div>
+              ) : null
+            )}
           </div>
-          <div className="mt-2 pt-2 border-t border-white/5">
-            <input
-              type="text"
-              placeholder="Ask the agent..."
-              className="w-full bg-black border border-white/10 rounded-lg px-3 py-2 text-[11px] text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/40"
-            />
-          </div>
+          {agentVisible >= 7 && (
+            <div className="mt-2 pt-2 border-t border-white/5 animate-fade-in">
+              <input
+                type="text"
+                placeholder="Ask the agent..."
+                className="w-full bg-black border border-white/10 rounded-lg px-3 py-2 text-[11px] text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/40"
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
