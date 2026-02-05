@@ -3,8 +3,7 @@ import { LogoIntro } from '../components/LogoIntro';
 import { AnimatedBackground } from '../components/AnimatedBackground';
 import { Navigation } from '../components/Navigation';
 import { HeroSection } from '../components/HeroSection';
-import { ValueProps } from '../components/ValueProps';
-import { ProductDemo } from '../components/ProductDemo';
+import { FeaturesSection } from '../components/FeaturesSection';
 import { TestimonialsSection } from '../components/TestimonialsSection';
 import { CTASection } from '../components/CTASection';
 import { Footer } from '../components/Footer';
@@ -32,8 +31,7 @@ export function Home() {
       {/* Main Content */}
       <main className="relative z-10">
         <HeroSection />
-        <ValueProps />
-        <ProductDemo />
+        <FeaturesSection />
         <TestimonialsSection />
         <CTASection />
         <Footer />

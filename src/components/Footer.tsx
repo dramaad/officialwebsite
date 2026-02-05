@@ -1,11 +1,18 @@
+import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 
 const footerLinks = {
-  Product: ['Features', 'Pricing'],
-  Company: ['About', 'Careers'],
+  Product: [
+    { label: 'Features', href: '#features' },
+    { label: 'Pricing', href: '#pricing' },
+  ],
+  Company: [
+    { label: 'About', href: '#' },
+    { label: 'Careers', href: '#' },
+  ],
   Legal: [
-    { label: 'Privacy Policy', href: '#/privacy' },
-    { label: 'Terms of Service', href: '#/terms' },
+    { label: 'Privacy Policy', href: '/privacy', isRoute: true },
+    { label: 'Terms of Service', href: '/terms', isRoute: true },
   ],
 };
 
@@ -21,7 +28,7 @@ export function Footer() {
               <span className="font-semibold text-xl text-white">Flamma</span>
             </a>
             <p className="text-gray-500 text-sm">
-              The generative engine for performance video.
+              The generative engine for performance marketing at scale.
             </p>
           </div>
 
@@ -31,17 +38,29 @@ export function Footer() {
               <h4 className="text-white font-semibold mb-4">{category}</h4>
               <ul className="space-y-3">
                 {links.map((link) => {
-                  const isObject = typeof link === 'object';
-                  const label = isObject ? link.label : link;
-                  const href = isObject ? link.href : '#';
+                  const isRoute = 'isRoute' in link && link.isRoute;
+                  
+                  if (isRoute) {
+                    return (
+                      <li key={link.label}>
+                        <Link
+                          to={link.href}
+                          className="text-gray-500 hover:text-white text-sm transition-colors inline-flex items-center gap-1 group"
+                        >
+                          {link.label}
+                          <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </Link>
+                      </li>
+                    );
+                  }
                   
                   return (
-                    <li key={label}>
+                    <li key={link.label}>
                       <a
-                        href={href}
+                        href={link.href}
                         className="text-gray-500 hover:text-white text-sm transition-colors inline-flex items-center gap-1 group"
                       >
-                        {label}
+                        {link.label}
                         <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </a>
                     </li>
@@ -52,19 +71,11 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
+        {/* Bottom Bar - just copyright, no duplicate links */}
+        <div className="pt-8 border-t border-white/5 flex items-center justify-center">
           <p className="text-gray-600 text-sm">
             © 2026 FlammaLabs Inc. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
-            <a href="#/privacy" className="text-gray-600 hover:text-white text-sm transition-colors">
-              Privacy Policy
-            </a>
-            <a href="#/terms" className="text-gray-600 hover:text-white text-sm transition-colors">
-              Terms of Service
-            </a>
-          </div>
         </div>
       </div>
     </footer>

@@ -81,31 +81,29 @@ export function HeroSection() {
             </p>
           </div>
 
+          {/* Process Bar - Eyebrow style above CTA */}
+          <div
+            ref={processRef}
+            className="flex justify-center mb-6"
+            style={{ opacity: 0 }}
+          >
+            <div className="inline-flex items-center gap-3">
+              <span className="eyebrow">RAW MATERIALS IN</span>
+              <ArrowRight className="w-4 h-4 text-accent-soft" />
+              <span className="eyebrow">REVENUE OUT</span>
+            </div>
+          </div>
+
           {/* CTA */}
           <div
             ref={ctaRef}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4"
             style={{ opacity: 0 }}
           >
             <a href="#demo" className="btn-primary flex items-center gap-2">
               Book a Demo
               <ArrowRight className="w-4 h-4" />
             </a>
-          </div>
-
-          {/* Process Bar */}
-          <div
-            ref={processRef}
-            className="flex justify-center"
-            style={{ opacity: 0 }}
-          >
-            <div className="process-bar">
-              <span className="text-white font-semibold tracking-wider">RAW MATERIALS IN</span>
-              <span className="process-arrow">
-                <ArrowRight className="w-5 h-5" />
-              </span>
-              <span className="text-accent-bright font-semibold tracking-wider">REVENUE OUT</span>
-            </div>
           </div>
         </div>
       </div>
