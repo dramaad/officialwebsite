@@ -426,6 +426,16 @@ input:focus-visible {
   animation-play-state: paused;
 }
 
+/* Seamless infinite marquee: two identical rows, translate -50% so loop has no jump */
+.animate-marquee-infinite {
+  animation: marquee 60s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-infinite:hover {
+  animation-play-state: paused;
+}
+
 /* Fade in animation */
 @keyframes fade-in {
   from {

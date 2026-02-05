@@ -10,21 +10,23 @@ import {
 gsap.registerPlugin(ScrollTrigger);
 
 // ——— Creative Radar ———
-// Ref: screenshots 1–3. No brands in Competitors; realistic hooks; Formats + AI Recommendation; orange/gray only.
+// Trending: strong hooks including visual descriptions. Competitors: screenshot 3 structure, no brand names.
 function CreativeRadarDemo() {
-  const [activeTab, setActiveTab] = useState<'trending' | 'strategies' | 'formats'>('trending');
+  const [activeTab, setActiveTab] = useState<'trending' | 'competitors' | 'formats'>('trending');
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   const trendingHooks = [
-    { hook: '"Wait for the ending..."', platform: 'TikTok', views: '2.1M', growth: '+340%', uses: '12.4k' },
-    { hook: '"Nobody talks about this..."', platform: 'Instagram', views: '1.8M', growth: '+280%', uses: '8.9k' },
-    { hook: '"Here\'s what actually happened..."', platform: 'TikTok', views: '956K', growth: '+195%', uses: '4.2k' },
+    { hook: 'Wait for the ending...', visual: null, platform: 'TikTok', views: '2.1M', growth: '+340%', uses: '12.4k' },
+    { hook: 'POV: You open the app for the first time', visual: 'POV / first-time reaction', platform: 'Instagram', views: '1.8M', growth: '+280%', uses: '8.9k' },
+    { hook: 'Split screen: 1 week later', visual: 'Before vs after (visual)', platform: 'TikTok', views: '1.2M', growth: '+195%', uses: '6.1k' },
+    { hook: 'Nobody talks about this...', visual: null, platform: 'TikTok', views: '956K', growth: '+162%', uses: '4.2k' },
+    { hook: 'This changed everything (no words)', visual: 'Pure visual payoff', platform: 'Instagram', views: '890K', growth: '+218%', uses: '5.3k' },
   ];
 
-  const strategies = [
-    { type: 'UGC Reaction', desc: 'Focus on real reactions and unexpected moments', creatives: '47', days: '30d' },
-    { type: 'Satisfying payoff', desc: 'ASMR-style satisfying moments performing well', creatives: '89', days: '30d' },
-    { type: 'Fail/Win hook', desc: 'Contrast hooks driving strong completion', creatives: '156', days: '30d' },
+  const competitors = [
+    { tag: 'UGC Reaction', duration: '15s', platforms: 'TikTok Meta', creatives: '47', days: '30d', insight: 'Heavy focus on real reactions and unexpected moments' },
+    { tag: 'Satisfying Gameplay', duration: '12s', platforms: 'Meta YouTube', creatives: '89', days: '30d', insight: 'ASMR-style satisfying moments performing well' },
+    { tag: 'Fail/Win Hook', duration: '18s', platforms: 'TikTok Meta YouTube', creatives: '156', days: '30d', insight: 'Contrast hooks driving strong completion' },
   ];
 
   const formats = [
@@ -48,7 +50,7 @@ function CreativeRadarDemo() {
       </div>
 
       <div className="flex gap-1 p-1 bg-black/40 rounded-lg mb-4">
-        {(['trending', 'strategies', 'formats'] as const).map((tab) => (
+        {(['trending', 'competitors', 'formats'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -57,16 +59,16 @@ function CreativeRadarDemo() {
             }`}
           >
             {tab === 'trending' && <TrendingUp className="w-3 h-3" />}
-            {tab === 'strategies' && <Target className="w-3 h-3" />}
+            {tab === 'competitors' && <Target className="w-3 h-3" />}
             {tab === 'formats' && <BarChart3 className="w-3 h-3" />}
-            {tab === 'trending' ? 'Trending Hooks' : tab === 'strategies' ? 'Strategies' : 'Formats'}
+            {tab === 'trending' ? 'Trending Hooks' : tab === 'competitors' ? 'Competitors' : 'Formats'}
           </button>
         ))}
       </div>
 
       {activeTab === 'trending' && (
         <>
-          <div className="space-y-2 mb-4">
+          <div className="space-y-2 mb-4 max-h-[220px] overflow-y-auto">
             {trendingHooks.map((item, i) => (
               <div
                 key={i}
@@ -74,22 +76,15 @@ function CreativeRadarDemo() {
               >
                 <div className="min-w-0 flex-1">
                   <p className="text-sm text-gray-200 truncate">{item.hook}</p>
+                  {item.visual && <p className="text-[10px] text-gray-500 mt-0.5">{item.visual}</p>}
                   <div className="flex items-center gap-3 mt-1.5 flex-wrap">
                     <span className="text-[10px] px-2 py-0.5 rounded bg-white/10 text-gray-400">{item.platform}</span>
-                    <span className="text-[10px] text-gray-500 flex items-center gap-1">
-                      <Eye className="w-3 h-3" /> {item.views}
-                    </span>
-                    <span className="text-[10px] text-orange-400 font-medium flex items-center gap-0.5">
-                      <ArrowUp className="w-3 h-3" /> {item.growth}
-                    </span>
+                    <span className="text-[10px] text-gray-500 flex items-center gap-1"><Eye className="w-3 h-3" /> {item.views}</span>
+                    <span className="text-[10px] text-orange-400 font-medium flex items-center gap-0.5"><ArrowUp className="w-3 h-3" /> {item.growth}</span>
                     <span className="text-[10px] text-gray-500">{item.uses} uses</span>
                   </div>
                 </div>
-                <button
-                  onClick={() => handleCopy(i)}
-                  className="p-2 rounded-md text-gray-500 hover:text-orange-400 hover:bg-orange-500/10 transition-colors flex-shrink-0"
-                  title="Copy"
-                >
+                <button onClick={() => handleCopy(i)} className="p-2 rounded-md text-gray-500 hover:text-orange-400 hover:bg-orange-500/10 transition-colors flex-shrink-0" title="Copy">
                   {copiedIndex === i ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                 </button>
               </div>
@@ -102,17 +97,21 @@ function CreativeRadarDemo() {
         </>
       )}
 
-      {activeTab === 'strategies' && (
+      {activeTab === 'competitors' && (
         <div className="space-y-2">
-          <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-2">Top creative strategies (no brand names)</p>
-          {strategies.map((s, i) => (
+          <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-2">Creative strategies (format & insight, no brand names)</p>
+          {competitors.map((c, i) => (
             <div key={i} className="p-3 rounded-lg bg-white/[0.02] border border-white/5">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-sm font-medium text-white">{s.type}</span>
-                <span className="text-[10px] text-orange-400">{s.creatives} new ({s.days})</span>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-sm font-medium text-white">{c.tag}</span>
+                <span className="text-[10px] text-orange-400">{c.creatives} new creatives ({c.days})</span>
               </div>
-              <p className="text-[11px] text-gray-500 italic flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-orange-400/60" /> {s.desc}
+              <div className="flex items-center gap-2 text-[10px] text-gray-500 mb-1.5">
+                <span>{c.duration}</span>
+                <span>{c.platforms}</span>
+              </div>
+              <p className="text-[11px] text-gray-500 flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-orange-400/60 flex-shrink-0" /> {c.insight}
               </p>
             </div>
           ))}
@@ -153,30 +152,21 @@ function CreativeRadarDemo() {
 }
 
 // ——— Content Decoding ———
-// Chatbot on top (Cardboard style) + multiple modules + Content Analysis Agent + timeline (剪映 style) + AI-detected moments.
+// Single agentic flow: natural language command → agent runs → timeline shows result + high-retention moments.
 function ContentDecodingDemo() {
   const [prompt, setPrompt] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [showResult, setShowResult] = useState(false);
-  const [clipStart, setClipStart] = useState(12);
-  const [clipEnd, setClipEnd] = useState(48);
-  const [playhead, setPlayhead] = useState(28);
-  const [isDragging, setIsDragging] = useState<'left' | 'right' | 'playhead' | null>(null);
+  const [clipStart, setClipStart] = useState(20);
+  const [clipEnd, setClipEnd] = useState(65);
+  const [isDragging, setIsDragging] = useState<'left' | 'right' | null>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  const modules = [
-    { name: 'Smart Trim', status: 'Trimmed', icon: '✓' },
-    { name: 'Silence Removal', value: '-4.2s', icon: '—' },
-    { name: 'Color Grade', value: 'LUT', icon: '✓' },
-    { name: 'Captions', value: '99%', icon: 'T' },
-    { name: 'Voiceover', value: '0:12', icon: '♪' },
-  ];
-
   const moments = [
-    { time: '00:09', label: 'Hook', sub: 'High engagement' },
-    { time: '00:21', label: 'Peak', sub: 'High engagement' },
-    { time: '00:36', label: 'Twist', sub: 'High engagement' },
-    { time: '00:48', label: 'CTA', sub: 'High engagement' },
+    { time: '00:09', label: 'Hook' },
+    { time: '00:21', label: 'Peak' },
+    { time: '00:36', label: 'Twist' },
+    { time: '00:48', label: 'CTA' },
   ];
 
   const handleSubmit = () => {
@@ -188,16 +178,15 @@ function ContentDecodingDemo() {
       setShowResult(true);
       setClipStart(9);
       setClipEnd(42);
-    }, 2000);
+    }, 1800);
   };
 
   const handleTrackMouse = (e: React.MouseEvent) => {
     if (!trackRef.current || !isDragging) return;
     const rect = trackRef.current.getBoundingClientRect();
     const pct = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
-    if (isDragging === 'left') setClipStart(Math.min(pct, clipEnd - 5));
-    if (isDragging === 'right') setClipEnd(Math.max(pct, clipStart + 5));
-    if (isDragging === 'playhead') setPlayhead(pct);
+    if (isDragging === 'left') setClipStart(Math.min(pct, clipEnd - 8));
+    if (isDragging === 'right') setClipEnd(Math.max(pct, clipStart + 8));
   };
 
   return (
@@ -207,8 +196,8 @@ function ContentDecodingDemo() {
       onMouseUp={() => setIsDragging(null)}
       onMouseLeave={() => setIsDragging(null)}
     >
-      {/* Describe the change — chatbot on top */}
-      <p className="text-[10px] text-gray-500 mb-2">Describe the change. We map it to timeline operations automatically.</p>
+      {/* 1. Natural language input */}
+      <p className="text-[10px] text-gray-500 mb-2">Describe the change. We map it to timeline operations.</p>
       <div className="relative mb-4">
         <input
           type="text"
@@ -223,94 +212,54 @@ function ContentDecodingDemo() {
         </button>
       </div>
 
-      {/* Multiple function modules (Cardboard style) */}
-      <div className="grid grid-cols-5 gap-1.5 mb-4">
-        {modules.map((m, i) => (
-          <div key={i} className="p-2 rounded-lg bg-white/[0.03] border border-white/5 text-center">
-            <span className="text-[9px] text-orange-400/80">{m.icon}</span>
-            <p className="text-[9px] text-gray-400 truncate mt-0.5">{m.name}</p>
-            <p className="text-[8px] text-gray-500 truncate">{m.status || m.value || ''}</p>
-          </div>
-        ))}
+      {/* 2. Agent status (single line) */}
+      <div className="flex items-center gap-2 mb-4">
+        <div className="w-6 h-6 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
+          <Bot className="w-3 h-3 text-orange-400" />
+        </div>
+        {isProcessing && (
+          <>
+            <div className="w-3 h-3 border border-orange-500 border-t-transparent rounded-full animate-spin" />
+            <span className="text-xs text-gray-400">Analyzing… trimming to best segment</span>
+          </>
+        )}
+        {showResult && !isProcessing && (
+          <span className="text-xs text-orange-400">Trimmed 0:12–0:42. Cliffhanger at 0:28.</span>
+        )}
+        {!isProcessing && !showResult && (
+          <span className="text-xs text-gray-500">Send a command to run.</span>
+        )}
       </div>
 
-      {/* Content Analysis Agent + message */}
-      <div className="flex items-start gap-2 mb-3 p-2 rounded-lg bg-orange-500/5 border border-orange-500/15">
-        <div className="w-7 h-7 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
-          <Bot className="w-3.5 h-3.5 text-orange-400" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-1.5 mb-0.5">
-            <span className="text-[10px] font-medium text-white">Content Analysis Agent</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-          </div>
-          {showResult ? (
-            <p className="text-[11px] text-gray-300">Cliffhanger moment identified at 00:28. Trimmed to best segment.</p>
-          ) : isProcessing ? (
-            <p className="text-[11px] text-gray-500">Analyzing structure...</p>
-          ) : (
-            <p className="text-[11px] text-gray-500">Send a command to analyze.</p>
-          )}
-        </div>
-      </div>
-
-      {/* Multi-track timeline (剪映 style) */}
-      <div className="mb-3">
+      {/* 3. Single timeline: waveform + selection + draggable handles */}
+      <div className="mb-4">
         <div className="flex justify-between text-[9px] text-gray-500 mb-1">
           <span>00:00</span>
-          <span>00:30</span>
+          <span>01:00</span>
         </div>
-        <div ref={trackRef} className="relative rounded-lg overflow-hidden border border-white/5">
-          {/* Tracks */}
-          <div className="flex flex-col gap-0.5 bg-black p-1.5">
-            <div className="h-5 flex items-center gap-2">
-              <span className="text-[8px] text-gray-500 w-10">Video</span>
-              <div className="flex-1 h-full rounded bg-gray-800/80 relative" />
-            </div>
-            <div className="h-5 flex items-center gap-2">
-              <span className="text-[8px] text-gray-500 w-10">Subs</span>
-              <div className="flex-1 h-full rounded bg-gray-800/50 relative" />
-            </div>
-            <div className="h-6 flex items-center gap-2">
-              <span className="text-[8px] text-gray-500 w-10">Wave</span>
-              <div className="flex-1 h-full flex items-center px-0.5 relative">
-                {[...Array(40)].map((_, i) => (
-                  <div key={i} className="flex-1 mx-px bg-gray-600 rounded-full" style={{ height: `${20 + Math.sin(i * 0.4) * 50}%` }} />
-                ))}
-              </div>
-            </div>
+        <div ref={trackRef} className="relative h-12 bg-black rounded-lg border border-white/5 overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-around px-1">
+            {[...Array(50)].map((_, i) => (
+              <div key={i} className="flex-1 mx-px bg-gray-600 rounded-full max-w-[3px]" style={{ height: `${25 + Math.sin(i * 0.35) * 45}%` }} />
+            ))}
           </div>
-          {/* Selection range */}
-          <div
-            className="absolute top-0 bottom-0 bg-orange-500/15 border-l border-r border-orange-500/50 pointer-events-none"
-            style={{ left: `${clipStart}%`, width: `${clipEnd - clipStart}%` }}
-          />
-          {/* Playhead */}
-          <div
-            className="absolute top-0 bottom-0 w-0.5 bg-white cursor-ew-resize z-10"
-            style={{ left: `${playhead}%` }}
-            onMouseDown={() => setIsDragging('playhead')}
-          >
-            <div className="absolute -top-0.5 left-1/2 -translate-x-1/2 w-2 h-2 bg-white rounded-full shadow" />
-          </div>
-          {/* Handles */}
-          <div className="absolute top-0 bottom-0 w-1.5 bg-white/90 cursor-ew-resize z-10 hover:bg-orange-400" style={{ left: `${clipStart}%` }} onMouseDown={() => setIsDragging('left')}>
+          <div className="absolute top-0 bottom-0 bg-orange-500/15 border-l border-r border-orange-500/50 pointer-events-none" style={{ left: `${clipStart}%`, width: `${clipEnd - clipStart}%` }} />
+          <div className="absolute top-0 bottom-0 w-1.5 bg-white/90 cursor-ew-resize z-10 hover:bg-orange-400 rounded-sm" style={{ left: `${clipStart}%` }} onMouseDown={() => setIsDragging('left')}>
             <GripVertical className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 text-gray-800" />
           </div>
-          <div className="absolute top-0 bottom-0 w-1.5 bg-white/90 cursor-ew-resize z-10 hover:bg-orange-400" style={{ left: `${clipEnd}%` }} onMouseDown={() => setIsDragging('right')}>
+          <div className="absolute top-0 bottom-0 w-1.5 bg-white/90 cursor-ew-resize z-10 hover:bg-orange-400 rounded-sm" style={{ left: `${clipEnd}%` }} onMouseDown={() => setIsDragging('right')}>
             <GripVertical className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 text-gray-800" />
           </div>
         </div>
       </div>
 
-      {/* AI-Detected High Retention Moments */}
+      {/* 4. AI-detected high retention moments */}
       <div className="space-y-1">
-        <p className="text-[9px] text-gray-500 uppercase tracking-wider mb-1.5">AI-Detected High Retention Moments</p>
+        <p className="text-[9px] text-gray-500 uppercase tracking-wider mb-1.5">High retention moments</p>
         {moments.map((m, i) => (
           <div key={i} className="flex items-center gap-2 py-1.5 px-2 rounded bg-white/[0.02] border border-white/5">
             <div className="w-1 h-4 rounded-full bg-orange-500/80 flex-shrink-0" />
             <span className="text-[10px] text-gray-300">{m.time} {m.label}</span>
-            <span className="text-[9px] text-gray-500">— {m.sub}</span>
             <ChevronRight className="w-3 h-3 text-gray-600 ml-auto" />
           </div>
         ))}
@@ -335,13 +284,14 @@ function GenerativeScaleDemo() {
 
   const languages = ['EN', 'ZH', 'ES', 'JA', 'DE', 'PT', 'KO', 'FR'];
   const platforms = [
-    { name: 'IG Reels', ratio: '9:16', count: 12, done: progress > 30 },
-    { name: 'TikTok', ratio: '9:16', count: 12, done: progress > 60 },
-    { name: 'YT Shorts', ratio: '9:16', count: 8, done: progress >= 100 },
+    { name: 'Facebook', ratio: '1:1', count: 8, done: progress > 20 },
+    { name: 'IG Reels', ratio: '9:16', count: 12, done: progress > 40 },
+    { name: 'TikTok', ratio: '9:16', count: 12, done: progress > 65 },
+    { name: 'YT Shorts', ratio: '9:16', count: 8, done: progress > 85 },
     { name: 'YouTube', ratio: '16:9', count: 6, done: progress >= 100 },
   ];
 
-  const total = progress >= 100 ? 38 : '—';
+  const total = progress >= 100 ? 46 : '—';
 
   return (
     <div className="bg-[#0d0d0d] rounded-xl border border-white/[0.06] p-5 h-full shadow-xl shadow-black/20">
@@ -390,10 +340,17 @@ function GenerativeScaleDemo() {
           </div>
         </div>
         <div className="grid grid-cols-3 gap-1.5 flex-1 min-w-0">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className={`rounded border flex flex-col items-center justify-center transition-all ${progress > i * 16 ? 'border-orange-500/30 bg-orange-500/5' : 'border-white/5 bg-black/50'}`} style={{ aspectRatio: progress > i * 16 && i % 2 === 0 ? '16/9' : '9/16' }}>
-              <Play className={`w-3 h-3 ${progress > i * 16 ? 'text-orange-400' : 'text-gray-700'}`} />
-              {progress > i * 16 && <span className="text-[8px] text-gray-500 mt-0.5">{i % 2 === 0 ? '16:9' : '9:16'}</span>}
+          {[
+            { ratio: '9/16', label: '9:16' },
+            { ratio: '9/16', label: '9:16' },
+            { ratio: '1/1', label: '1:1' },
+            { ratio: '9/16', label: '9:16' },
+            { ratio: '16/9', label: '16:9' },
+            { ratio: '9/16', label: '9:16' },
+          ].map((item, i) => (
+            <div key={i} className={`rounded border flex flex-col items-center justify-center transition-all ${progress > (i + 1) * 15 ? 'border-orange-500/30 bg-orange-500/5' : 'border-white/5 bg-black/50'}`} style={{ aspectRatio: item.ratio }}>
+              <Play className={`w-3 h-3 ${progress > (i + 1) * 15 ? 'text-orange-400' : 'text-gray-700'}`} />
+              {progress > (i + 1) * 15 && <span className="text-[8px] text-gray-500 mt-0.5">{item.label}</span>}
             </div>
           ))}
         </div>
