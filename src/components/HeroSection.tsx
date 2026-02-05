@@ -8,10 +8,11 @@ export function HeroSection() {
   const h2Ref = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const processRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 2.5 });
+      const tl = gsap.timeline({ delay: 2.8 });
 
       // H1 animation
       tl.fromTo(
@@ -45,14 +46,68 @@ export function HeroSection() {
     return () => ctx.revert();
   }, []);
 
+  // Try to autoplay video when component mounts
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {
+        // Autoplay failed, that's ok
+      });
+    }
+  }, []);
+
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Diffuse glow behind H1 */}
+    <section ref={sectionRef} className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-black">
+      {/* Video Background - uncomment and add video file when available */}
+      {/* 
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover opacity-40"
+      >
+        <source src="/hero-video.mp4" type="video/mp4" />
+      </video>
+      */}
+
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Subtle animated gradient orbs */}
+        <div 
+          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full opacity-[0.03] animate-pulse-slow"
+          style={{
+            background: 'radial-gradient(circle, rgba(249, 115, 22, 1) 0%, transparent 70%)',
+            filter: 'blur(100px)',
+          }}
+        />
+        <div 
+          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full opacity-[0.02] animate-pulse-slow"
+          style={{
+            background: 'radial-gradient(circle, rgba(249, 115, 22, 1) 0%, transparent 70%)',
+            filter: 'blur(80px)',
+            animationDelay: '2s',
+          }}
+        />
+        
+        {/* Subtle grid pattern */}
+        <div 
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px',
+          }}
+        />
+      </div>
+
+      {/* Vignette overlay */}
       <div 
-        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(249, 115, 22, 0.12) 0%, transparent 60%)',
-          filter: 'blur(60px)',
+          background: 'radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 100%)',
         }}
       />
 

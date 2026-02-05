@@ -9,36 +9,45 @@ export function LogoIntro({ onComplete }: LogoIntroProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
+  const textMaskRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const maskRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const tl = gsap.timeline();
 
-    // Phase 1: Ignite animation (torch lighting from bottom to top)
+    // Phase 1: Ignite animation - flame burns from BOTTOM to TOP
+    // Mask starts at top:0 with 100% height, covering logo completely
+    // As height decreases, logo is revealed from bottom upward (like flames rising)
     tl.set(maskRef.current, { height: '100%' })
       .to(maskRef.current, {
         height: '0%',
-        duration: 1.2,
-        ease: 'power2.inOut',
+        duration: 1.4,
+        ease: 'power2.out',
       })
       // Glow pulse during ignition
       .fromTo(
         glowRef.current,
         { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1.2, duration: 0.6, ease: 'power2.out' },
-        '-=0.8'
+        { opacity: 1, scale: 1.3, duration: 0.8, ease: 'power2.out' },
+        '-=1.0'
       )
       .to(glowRef.current, { scale: 1, duration: 0.4, ease: 'power2.inOut' })
-      // Text appears letter by letter
+      // Text appears from LEFT to RIGHT using clip-path
       .fromTo(
         textRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
-        '-=0.3'
+        { opacity: 1 },
+        { opacity: 1, duration: 0 },
+        '-=0.6'
+      )
+      .fromTo(
+        textMaskRef.current,
+        { width: '0%' },
+        { width: '100%', duration: 0.8, ease: 'power2.out' },
+        '-=0.6'
       )
       // Hold for a moment
-      .to({}, { duration: 0.8 })
+      .to({}, { duration: 0.6 })
       // Exit: Logo flies to top-left corner
       .to(
         logoRef.current,
@@ -52,7 +61,7 @@ export function LogoIntro({ onComplete }: LogoIntroProps) {
       )
       .to(
         textRef.current,
-        { opacity: 0, y: -20, duration: 0.3, ease: 'power2.in' },
+        { opacity: 0, x: -30, duration: 0.3, ease: 'power2.in' },
         '-=0.6'
       )
       .to(
@@ -75,70 +84,72 @@ export function LogoIntro({ onComplete }: LogoIntroProps) {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
-      style={{ backgroundColor: '#0a0a0a' }}
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black"
     >
       {/* Ambient glow */}
       <div
         ref={glowRef}
-        className="absolute w-[400px] h-[400px] rounded-full opacity-0"
+        className="absolute w-[500px] h-[500px] rounded-full opacity-0"
         style={{
-          background: 'radial-gradient(circle, rgba(254, 109, 4, 0.25) 0%, rgba(254, 109, 4, 0.1) 40%, transparent 70%)',
-          filter: 'blur(40px)',
+          background: 'radial-gradient(circle, rgba(254, 109, 4, 0.2) 0%, rgba(254, 109, 4, 0.08) 40%, transparent 70%)',
+          filter: 'blur(60px)',
         }}
       />
 
       {/* Logo container */}
       <div ref={logoRef} className="relative">
         {/* Logo with mask for ignition effect */}
-        <div className="relative w-32 h-32 md:w-40 md:h-40">
+        <div className="relative w-32 h-32 md:w-40 md:h-40 overflow-hidden">
           <img
             src="/flamma_logo.svg"
             alt="Flamma"
             className="w-full h-full object-contain"
           />
-          {/* Mask that reveals from bottom to top */}
+          {/* Mask anchored at TOP - shrinking reveals from bottom (flames rise) */}
           <div
             ref={maskRef}
-            className="absolute bottom-0 left-0 right-0 bg-[#0a0a0a]"
+            className="absolute top-0 left-0 right-0 bg-black"
             style={{ height: '100%' }}
           />
         </div>
 
-        {/* Flame particles during ignition */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(8)].map((_, i) => (
+        {/* Subtle ember particles during ignition */}
+        <div className="absolute inset-0 pointer-events-none overflow-visible">
+          {[...Array(6)].map((_, i) => (
             <div
               key={i}
               className="absolute w-1 h-1 rounded-full animate-float-particle"
               style={{
-                left: `${30 + Math.random() * 40}%`,
-                bottom: '20%',
-                background: `rgba(254, ${109 + Math.random() * 50}, 4, ${0.6 + Math.random() * 0.4})`,
-                animationDelay: `${i * 0.15}s`,
-                animationDuration: `${1 + Math.random() * 0.5}s`,
+                left: `${35 + Math.random() * 30}%`,
+                bottom: '10%',
+                background: `rgba(254, 109, 4, ${0.4 + Math.random() * 0.3})`,
+                animationDelay: `${i * 0.2}s`,
+                animationDuration: `${1.2 + Math.random() * 0.5}s`,
               }}
             />
           ))}
         </div>
       </div>
 
-      {/* Tagline */}
-      <div
-        ref={textRef}
-        className="mt-8 opacity-0"
-      >
-        <p
-          className="text-lg md:text-xl font-semibold tracking-widest"
-          style={{
-            background: 'linear-gradient(90deg, #fe6d04, #fb923c)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}
+      {/* Tagline - reveals left to right */}
+      <div ref={textRef} className="mt-8 overflow-hidden">
+        <div 
+          ref={textMaskRef}
+          className="overflow-hidden"
+          style={{ width: '0%' }}
         >
-          IGNITE YOUR GROWTH
-        </p>
+          <p
+            className="text-lg md:text-xl font-semibold tracking-[0.25em] whitespace-nowrap"
+            style={{
+              background: 'linear-gradient(90deg, #fe6d04, #fb923c)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            IGNITE YOUR GROWTH
+          </p>
+        </div>
       </div>
     </div>
   );
