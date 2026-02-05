@@ -16,39 +16,37 @@ export function LogoIntro({ onComplete }: LogoIntroProps) {
   useEffect(() => {
     const tl = gsap.timeline();
 
-    // Phase 1: Ignite animation - flame burns from BOTTOM to TOP
-    // Mask starts at top:0 with 100% height, covering logo completely
-    // As height decreases, logo is revealed from bottom upward (like flames rising)
+    // Phase 1: Ignite - logo reveals from BOTTOM to TOP
+    // Mask has soft bottom edge (gradient) so no visible "black bar"
     tl.set(maskRef.current, { height: '100%' })
       .to(maskRef.current, {
         height: '0%',
-        duration: 1.4,
+        duration: 1.5,
         ease: 'power2.out',
       })
-      // Glow pulse during ignition
+      // Glow appears ONLY after logo is mostly revealed (no early orange halo)
       .fromTo(
         glowRef.current,
-        { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1.3, duration: 0.8, ease: 'power2.out' },
-        '-=1.0'
+        { opacity: 0, scale: 0.9 },
+        { opacity: 1, scale: 1.2, duration: 0.6, ease: 'power2.out' },
+        '-=0.5' // start 0.5s before mask ends = when logo is ~2/3 visible
       )
-      .to(glowRef.current, { scale: 1, duration: 0.4, ease: 'power2.inOut' })
-      // Text appears from LEFT to RIGHT using clip-path
+      .to(glowRef.current, { scale: 1, duration: 0.3, ease: 'power2.inOut' })
+      // Text left to right
       .fromTo(
         textRef.current,
         { opacity: 1 },
         { opacity: 1, duration: 0 },
-        '-=0.6'
+        '-=0.4'
       )
       .fromTo(
         textMaskRef.current,
         { width: '0%' },
         { width: '100%', duration: 0.8, ease: 'power2.out' },
-        '-=0.6'
+        '-=0.4'
       )
-      // Hold for a moment
-      .to({}, { duration: 0.6 })
-      // Exit: Logo flies to top-left corner
+      .to({}, { duration: 0.5 })
+      // Exit
       .to(
         logoRef.current,
         {
@@ -86,54 +84,53 @@ export function LogoIntro({ onComplete }: LogoIntroProps) {
       ref={containerRef}
       className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black"
     >
-      {/* Ambient glow */}
+      {/* Glow: only visible after logo is revealed */}
       <div
         ref={glowRef}
-        className="absolute w-[500px] h-[500px] rounded-full opacity-0"
+        className="absolute w-[480px] h-[480px] rounded-full opacity-0"
         style={{
-          background: 'radial-gradient(circle, rgba(254, 109, 4, 0.2) 0%, rgba(254, 109, 4, 0.08) 40%, transparent 70%)',
-          filter: 'blur(60px)',
+          background: 'radial-gradient(circle, rgba(254, 109, 4, 0.18) 0%, rgba(254, 109, 4, 0.06) 45%, transparent 70%)',
+          filter: 'blur(50px)',
         }}
       />
 
-      {/* Logo container */}
       <div ref={logoRef} className="relative">
-        {/* Logo with mask for ignition effect */}
         <div className="relative w-32 h-32 md:w-40 md:h-40 overflow-hidden">
           <img
             src="/flamma_logo.svg"
             alt="Flamma"
             className="w-full h-full object-contain"
           />
-          {/* Mask anchored at TOP - shrinking reveals from bottom (flames rise) */}
+          {/* Mask: soft gradient at bottom edge so no hard black bar when shrinking */}
           <div
             ref={maskRef}
-            className="absolute top-0 left-0 right-0 bg-black"
-            style={{ height: '100%' }}
+            className="absolute top-0 left-0 right-0"
+            style={{
+              height: '100%',
+              background: 'linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%)',
+            }}
           />
         </div>
 
-        {/* Subtle ember particles during ignition */}
         <div className="absolute inset-0 pointer-events-none overflow-visible">
-          {[...Array(6)].map((_, i) => (
+          {[...Array(5)].map((_, i) => (
             <div
               key={i}
               className="absolute w-1 h-1 rounded-full animate-float-particle"
               style={{
-                left: `${35 + Math.random() * 30}%`,
-                bottom: '10%',
-                background: `rgba(254, 109, 4, ${0.4 + Math.random() * 0.3})`,
-                animationDelay: `${i * 0.2}s`,
-                animationDuration: `${1.2 + Math.random() * 0.5}s`,
+                left: `${38 + Math.random() * 24}%`,
+                bottom: '8%',
+                background: `rgba(254, 109, 4, ${0.35 + Math.random() * 0.25})`,
+                animationDelay: `${i * 0.25}s`,
+                animationDuration: `${1.3 + Math.random() * 0.4}s`,
               }}
             />
           ))}
         </div>
       </div>
 
-      {/* Tagline - reveals left to right */}
       <div ref={textRef} className="mt-8 overflow-hidden">
-        <div 
+        <div
           ref={textMaskRef}
           className="overflow-hidden"
           style={{ width: '0%' }}

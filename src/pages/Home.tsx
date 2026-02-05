@@ -18,7 +18,10 @@ export function Home() {
   };
 
   return (
-    <div className="relative min-h-screen" style={{ backgroundColor: '#0a0a0a' }}>
+    <div className="relative min-h-screen bg-black">
+      {/* Subtle film grain for depth */}
+      <div className="grain-overlay" aria-hidden />
+
       {/* Logo Intro Animation */}
       {showIntro && <LogoIntro onComplete={handleIntroComplete} />}
 

@@ -150,9 +150,19 @@
   color: var(--text-primary);
 }
 
-/* Glow text effect */
+/* Glow text effect - premium highlight */
 .glow-text {
-  text-shadow: 0 0 40px rgba(249, 115, 22, 0.4), 0 0 80px rgba(249, 115, 22, 0.2);
+  text-shadow: 0 0 48px rgba(249, 115, 22, 0.45), 0 0 96px rgba(249, 115, 22, 0.2);
+}
+
+/* Subtle film grain overlay for depth */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Card styles */
@@ -435,17 +445,42 @@ input:focus-visible {
 /* Slow pulse for background effects */
 @keyframes pulse-slow {
   0%, 100% {
-    opacity: 0.03;
-    transform: scale(1);
-  }
-  50% {
     opacity: 0.06;
-    transform: scale(1.1);
+    transform: scale(1) translate(0, 0);
+  }
+  33% {
+    opacity: 0.12;
+    transform: scale(1.08) translate(2%, -1%);
+  }
+  66% {
+    opacity: 0.08;
+    transform: scale(1.05) translate(-1%, 2%);
   }
 }
 
 .animate-pulse-slow {
-  animation: pulse-slow 8s ease-in-out infinite;
+  animation: pulse-slow 12s ease-in-out infinite;
+}
+
+/* Hero background drift */
+@keyframes hero-drift {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.08;
+  }
+  50% {
+    transform: translate(5%, -3%) scale(1.15);
+    opacity: 0.14;
+  }
+}
+
+.animate-hero-drift {
+  animation: hero-drift 15s ease-in-out infinite;
+}
+
+.animate-hero-drift-delay {
+  animation: hero-drift 18s ease-in-out infinite;
+  animation-delay: -6s;
 }
 
 /* Reduced motion */

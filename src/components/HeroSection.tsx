@@ -71,43 +71,50 @@ export function HeroSection() {
       </video>
       */}
 
-      {/* Animated gradient background */}
+      {/* Animated gradient background - visible presence */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Subtle animated gradient orbs */}
+        {/* Primary orb - stronger, drifts */}
         <div 
-          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full opacity-[0.03] animate-pulse-slow"
+          className="absolute top-1/4 left-1/3 w-[700px] h-[700px] rounded-full animate-hero-drift pointer-events-none"
           style={{
-            background: 'radial-gradient(circle, rgba(249, 115, 22, 1) 0%, transparent 70%)',
-            filter: 'blur(100px)',
+            background: 'radial-gradient(circle, rgba(249, 115, 22, 0.9) 0%, rgba(249, 115, 22, 0.2) 40%, transparent 65%)',
+            filter: 'blur(80px)',
           }}
         />
         <div 
-          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full opacity-[0.02] animate-pulse-slow"
+          className="absolute bottom-1/3 right-1/4 w-[550px] h-[550px] rounded-full animate-hero-drift-delay pointer-events-none"
           style={{
-            background: 'radial-gradient(circle, rgba(249, 115, 22, 1) 0%, transparent 70%)',
-            filter: 'blur(80px)',
-            animationDelay: '2s',
+            background: 'radial-gradient(circle, rgba(254, 109, 4, 0.6) 0%, transparent 60%)',
+            filter: 'blur(70px)',
+          }}
+        />
+        {/* Center glow */}
+        <div 
+          className="absolute top-1/2 left-1/2 w-[400px] h-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full animate-pulse-slow pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 70%)',
+            filter: 'blur(60px)',
           }}
         />
         
-        {/* Subtle grid pattern */}
+        {/* Grid - more visible */}
         <div 
-          className="absolute inset-0 opacity-[0.02]"
+          className="absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
+              linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)
             `,
-            backgroundSize: '60px 60px',
+            backgroundSize: '64px 64px',
           }}
         />
       </div>
 
-      {/* Vignette overlay */}
+      {/* Vignette - lighter so content stands out */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 100%)',
+          background: 'radial-gradient(ellipse 80% 60% at 50% 50%, transparent 30%, rgba(0,0,0,0.5) 100%)',
         }}
       />
 
