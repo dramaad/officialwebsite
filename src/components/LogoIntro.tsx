@@ -17,19 +17,18 @@ export function LogoIntro({ onComplete }: LogoIntroProps) {
     const tl = gsap.timeline();
 
     // Phase 1: Ignite - logo reveals from BOTTOM to TOP
-    // Mask has soft bottom edge (gradient) so no visible "black bar"
     tl.set(maskRef.current, { height: '100%' })
       .to(maskRef.current, {
         height: '0%',
-        duration: 1.5,
+        duration: 1.6,
         ease: 'power2.out',
       })
-      // Glow appears ONLY after logo is mostly revealed (no early orange halo)
+      // Glow appears only after logo is fully revealed (slower, no black bar trace)
       .fromTo(
         glowRef.current,
         { opacity: 0, scale: 0.9 },
-        { opacity: 1, scale: 1.2, duration: 0.6, ease: 'power2.out' },
-        '-=0.5' // start 0.5s before mask ends = when logo is ~2/3 visible
+        { opacity: 1, scale: 1.2, duration: 0.7, ease: 'power2.out' },
+        '-=0.35' // start near end of mask so glow is delayed
       )
       .to(glowRef.current, { scale: 1, duration: 0.3, ease: 'power2.inOut' })
       // Text left to right
@@ -101,13 +100,13 @@ export function LogoIntro({ onComplete }: LogoIntroProps) {
             alt="Flamma"
             className="w-full h-full object-contain"
           />
-          {/* Mask: soft gradient at bottom edge so no hard black bar when shrinking */}
+          {/* Mask: long gradient so shrinking edge is soft, no visible bar */}
           <div
             ref={maskRef}
             className="absolute top-0 left-0 right-0"
             style={{
               height: '100%',
-              background: 'linear-gradient(to bottom, #000 0%, #000 70%, transparent 100%)',
+              background: 'linear-gradient(to bottom, #000 0%, #000 50%, rgba(0,0,0,0.6) 80%, transparent 100%)',
             }}
           />
         </div>
