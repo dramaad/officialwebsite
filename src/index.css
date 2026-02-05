@@ -131,6 +131,30 @@
   color: var(--text-muted);
 }
 
+/* Feature headlines */
+.headline-feature {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: clamp(28px, 3vw, 42px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+/* Lead-in text */
+.lead-in {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: clamp(18px, 1.5vw, 22px);
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+/* Glow text effect */
+.glow-text {
+  text-shadow: 0 0 40px rgba(249, 115, 22, 0.4), 0 0 80px rgba(249, 115, 22, 0.2);
+}
+
 /* Card styles */
 .card-dark {
   background: var(--bg-card);
@@ -142,6 +166,14 @@
 .card-dark:hover {
   border-color: var(--border-hover);
   background: var(--bg-tertiary);
+}
+
+/* Glass card with blur */
+.glass-card {
+  background: rgba(20, 20, 20, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
 }
 
 /* Primary button with border */
@@ -202,6 +234,44 @@
   background: rgba(255, 255, 255, 0.05);
 }
 
+/* Outline button */
+.btn-outline {
+  background: transparent;
+  color: var(--accent-soft);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 14px 32px;
+  border-radius: 10px;
+  border: 2px solid var(--accent-soft);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  background: rgba(249, 115, 22, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Ember button for forms */
+.btn-ember {
+  background: linear-gradient(135deg, #FF3D00, #FF9100);
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 14px 32px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-ember:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(255, 61, 0, 0.4);
+}
+
 /* Input styles */
 .input-dark {
   background: var(--bg-secondary);
@@ -249,6 +319,22 @@
   position: relative;
   width: 100%;
   padding: 100px 0;
+}
+
+/* Process bar */
+.process-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 32px;
+  background: linear-gradient(90deg, rgba(249, 115, 22, 0.1) 0%, rgba(251, 146, 60, 0.1) 100%);
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  border-radius: 100px;
+}
+
+.process-arrow {
+  color: var(--accent-soft);
+  font-weight: 700;
 }
 
 /* Scrollbar */

@@ -19,10 +19,8 @@ export function Navigation({ showLogo }: NavigationProps) {
   }, []);
 
   const navLinks = [
-    { label: 'Product', href: '#product' },
-    { label: 'Features', href: '#features' },
+    { label: 'Product', href: '#features' },
     { label: 'Pricing', href: '#pricing' },
-    { label: 'Testimonials', href: '#testimonials' },
   ];
 
   return (
@@ -64,8 +62,8 @@ export function Navigation({ showLogo }: NavigationProps) {
             <a href="#login" className="btn-ghost">
               Log in
             </a>
-            <a href="#signup" className="btn-primary">
-              Sign up
+            <a href="#demo" className="btn-primary">
+              Book a Demo
             </a>
           </div>
 
@@ -97,8 +95,8 @@ export function Navigation({ showLogo }: NavigationProps) {
               <a href="#login" className="block btn-secondary text-center">
                 Log in
               </a>
-              <a href="#signup" className="block btn-primary text-center">
-                Sign up
+              <a href="#demo" className="block btn-primary text-center">
+                Book a Demo
               </a>
             </div>
           </div>

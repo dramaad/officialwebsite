@@ -1,0 +1,151 @@
+/* App-specific styles */
+
+/* Float animation for hero elements */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Pulse animation for dots */
+@keyframes pulse-dot {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Card hover lift effect */
+.card-dark {
+  transition: all 0.3s ease;
+}
+
+.card-dark:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Button hover states */
+.btn-primary:hover {
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.3);
+}
+
+.btn-secondary:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Navigation scroll state */
+nav {
+  transition: all 0.3s ease;
+}
+
+/* Smooth section transitions */
+section {
+  position: relative;
+}
+
+/* Testimonial card hover */
+.testimonial-card {
+  transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+  border-color: rgba(249, 115, 22, 0.2);
+}
+
+/* Pricing card highlight */
+.pricing-card {
+  transition: all 0.3s ease;
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Feature card icon hover */
+.feature-card:hover .w-12 {
+  background: rgba(249, 115, 22, 0.15);
+}
+
+/* Link underline animation */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.2s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a1a1a;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2a2a2a;
+}
+
+/* Selection color */
+::selection {
+  background-color: rgba(249, 115, 22, 0.2);
+  color: white;
+}
+
+/* Focus visible for accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .headline-hero {
+    font-size: clamp(32px, 10vw, 48px);
+  }
+  
+  .headline-section {
+    font-size: clamp(28px, 8vw, 40px);
+  }
+  
+  .section {
+    padding: 60px 0;
+  }
+}

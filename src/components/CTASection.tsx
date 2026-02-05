@@ -48,24 +48,24 @@ export function CTASection() {
 
           <div className="relative z-10">
             <h2 className="headline-section mb-4">
-              Ready to Transform Your{' '}
-              <span className="text-accent-soft">Creative Workflow</span>?
+              Stop Editing.{' '}
+              <span className="text-accent-bright">Start Growing.</span>
             </h2>
-            <p className="subheadline max-w-2xl mx-auto mb-8">
-              Join teams already using Flamma to generate high-performing ad creatives at scale. 
-              Start your free trial today.
+            <p className="body-text max-w-xl mx-auto mb-8">
+              Join the top growth teams using Flamma to generate high-performing video ads at scale. 
+              Your next winner is waiting.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a 
-                href="#signup" 
-                className="btn-primary flex items-center gap-2 border-2 border-orange-500"
+                href="#demo" 
+                className="btn-primary flex items-center gap-2 border-2"
               >
-                Start Free Trial
+                Book A Demo
                 <ArrowRight className="w-4 h-4" />
               </a>
               <a 
                 href="#contact" 
-                className="btn-secondary flex items-center gap-2 border border-white/20"
+                className="btn-secondary flex items-center gap-2 border"
               >
                 Contact Sales
                 <ArrowRight className="w-4 h-4" />

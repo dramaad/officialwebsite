@@ -3,87 +3,109 @@ import { gsap } from 'gsap';
 import { ArrowRight } from 'lucide-react';
 
 export function HeroSection() {
-  const headlineRef = useRef<HTMLHeadingElement>(null);
-  const subheadRef = useRef<HTMLParagraphElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const h1Ref = useRef<HTMLHeadingElement>(null);
+  const h2Ref = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const taglineRef = useRef<HTMLDivElement>(null);
+  const processRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 2.2 });
+      const tl = gsap.timeline({ delay: 2.5 });
 
+      // H1 animation
       tl.fromTo(
-        headlineRef.current,
-        { opacity: 0, y: 30 },
+        h1Ref.current,
+        { opacity: 0, y: 40 },
         { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
       )
-        .fromTo(
-          subheadRef.current,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
-          '-=0.4'
-        )
-        .fromTo(
-          ctaRef.current,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
-          '-=0.3'
-        )
-        .fromTo(
-          taglineRef.current,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
-          '-=0.2'
-        );
-    });
+      // H2 animation
+      .fromTo(
+        h2Ref.current,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
+        '-=0.4'
+      )
+      // CTA animation
+      .fromTo(
+        ctaRef.current,
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' },
+        '-=0.3'
+      )
+      // Process bar animation
+      .fromTo(
+        processRef.current,
+        { opacity: 0, y: 20, scale: 0.95 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power3.out' },
+        '-=0.2'
+      );
+    }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center pt-16">
-      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <section ref={sectionRef} className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+      {/* Diffuse glow behind H1 */}
+      <div 
+        className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at center, rgba(249, 115, 22, 0.12) 0%, transparent 60%)',
+          filter: 'blur(60px)',
+        }}
+      />
+
+      <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
-          {/* Headline */}
+          {/* H1 */}
           <h1
-            ref={headlineRef}
+            ref={h1Ref}
             className="headline-hero mb-8"
             style={{ opacity: 0 }}
           >
             Turn <span className="text-accent-soft">Raw Footage</span> into{' '}
-            <span className="text-accent-bright">Winning Ads</span> at Scale
+            <span className="text-accent-bright glow-text">Winning Ads</span>
+            <br />
+            <span className="text-white">at Scale</span>
           </h1>
 
-          {/* Subheadline */}
-          <p
-            ref={subheadRef}
-            className="subheadline max-w-3xl mx-auto mb-10"
-            style={{ opacity: 0 }}
-          >
-            Your ultimate engine for performance marketing. Our agents use fine-tuned multimodal models 
-            to decode market sentiment and your raw footage, extracting the best hooks and cliffhangers. 
-            We generate paid ads at scale and autonomously optimize campaigns directly to your ad networks.
-          </p>
+          {/* H2 - Lead-in + description */}
+          <div ref={h2Ref} className="mb-10" style={{ opacity: 0 }}>
+            <p className="lead-in mb-4">
+              Your ultimate engine for performance marketing.
+            </p>
+            <p className="body-text max-w-2xl mx-auto">
+              With fine-tuned multimodal models, our agents decode market sentiment and raw footage, 
+              extract winning hooks and cliffhangers, then autonomously optimize campaigns directly to your ad networks.
+            </p>
+          </div>
 
           {/* CTA */}
           <div
             ref={ctaRef}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10"
             style={{ opacity: 0 }}
           >
-            <a href="#signup" className="btn-primary flex items-center gap-2">
-              Get Started Free
+            <a href="#demo" className="btn-primary flex items-center gap-2">
+              Book a Demo
               <ArrowRight className="w-4 h-4" />
             </a>
           </div>
 
-          {/* Tagline */}
+          {/* Process Bar */}
           <div
-            ref={taglineRef}
-            className="mt-20"
+            ref={processRef}
+            className="flex justify-center"
             style={{ opacity: 0 }}
           >
-            <p className="eyebrow mb-2">Raw materials in. Revenue out.</p>
+            <div className="process-bar">
+              <span className="text-white font-semibold tracking-wider">RAW MATERIALS IN</span>
+              <span className="process-arrow">
+                <ArrowRight className="w-5 h-5" />
+              </span>
+              <span className="text-accent-bright font-semibold tracking-wider">REVENUE OUT</span>
+            </div>
           </div>
         </div>
       </div>
