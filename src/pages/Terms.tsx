@@ -370,10 +370,7 @@ export function Terms() {
           <div className="bg-white/5 rounded-lg p-6 mt-4">
             <p className="text-gray-300">
               <strong>FlammaLabs Inc.</strong><br />
-              <strong>Email:</strong> legal@goflamma.ai<br />
-              <strong>Support:</strong> support@goflamma.ai<br />
-              <strong>Website:</strong> https://goflamma.ai<br />
-              <strong>Address:</strong> San Francisco, CA, United States
+              <strong>Email:</strong> legal@goflamma.ai
             </p>
           </div>
         </div>

@@ -23,8 +23,8 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Logo & Description */}
           <div className="col-span-2 md:col-span-1">
-            <a href="#" className="flex items-center gap-2 mb-4">
-              <img src="/logo.png" alt="Flamma" className="w-8 h-8 object-contain" />
+            <a href="#" className="flex items-center gap-2.5 mb-4">
+              <img src="/flamma_logo.svg" alt="Flamma" className="w-10 h-10 object-contain" />
               <span className="font-semibold text-xl text-white">Flamma</span>
             </a>
             <p className="text-gray-500 text-sm">

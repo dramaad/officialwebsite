@@ -31,9 +31,39 @@ const testimonials = [
   },
 ];
 
+function TestimonialCard({ testimonial }: { testimonial: typeof testimonials[0] }) {
+  return (
+    <div className="flex-shrink-0 w-[340px] md:w-[400px] card-dark p-6 mx-3 hover:border-orange-500/30 transition-colors duration-300">
+      {/* Tag */}
+      <div className="mb-5">
+        <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-orange-500/10 text-orange-400 text-xs font-semibold">
+          {testimonial.tag}
+        </span>
+      </div>
+
+      {/* Quote */}
+      <p className="text-gray-300 text-sm leading-relaxed mb-6">
+        "{testimonial.quote}"
+      </p>
+
+      {/* Author */}
+      <div className="flex items-center gap-3 pt-5 border-t border-white/5">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
+          <span className="text-white text-sm font-semibold">
+            {testimonial.author[0]}
+          </span>
+        </div>
+        <div>
+          <p className="text-white font-medium text-sm">{testimonial.author}</p>
+          <p className="text-gray-500 text-xs">{testimonial.role}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function TestimonialsSection() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -55,30 +85,13 @@ export function TestimonialsSection() {
           }
         );
       }
-
-      // Cards stagger animation
-      const cards = sectionRef.current?.querySelectorAll('.testimonial-card');
-      if (cards) {
-        gsap.fromTo(
-          cards,
-          { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            stagger: 0.1,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: scrollRef.current,
-              start: 'top 80%',
-            },
-          }
-        );
-      }
     }, sectionRef);
 
     return () => ctx.revert();
   }, []);
+
+  // Duplicate testimonials for seamless loop
+  const duplicatedTestimonials = [...testimonials, ...testimonials];
 
   return (
     <section id="testimonials" ref={sectionRef} className="py-24 overflow-hidden">
@@ -87,62 +100,23 @@ export function TestimonialsSection() {
         <div className="text-center">
           <p className="eyebrow mb-4">Testimonials</p>
           <h2 className="headline-section">
-            Trusted by{' '}
+            Loved by{' '}
             <span className="text-accent-bright">Growth Teams</span>
           </h2>
         </div>
       </div>
 
-      {/* Horizontal Scrolling Testimonials */}
-      <div 
-        ref={scrollRef}
-        className="flex gap-6 overflow-x-auto scrollbar-hide px-4 sm:px-6 lg:px-8 pb-4 snap-x snap-mandatory"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        {/* Spacer for centering on large screens */}
-        <div className="flex-shrink-0 w-0 lg:w-[calc((100vw-1200px)/2)]" />
+      {/* Auto-scrolling Marquee */}
+      <div className="relative">
+        {/* Gradient masks for smooth fade on edges */}
+        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
         
-        {testimonials.map((testimonial, index) => (
-          <div
-            key={index}
-            className="testimonial-card flex-shrink-0 w-[320px] md:w-[380px] card-dark p-6 snap-start"
-          >
-            {/* Tag */}
-            <div className="mb-5">
-              <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-orange-500/10 text-orange-400 text-xs font-semibold">
-                {testimonial.tag}
-              </span>
-            </div>
-
-            {/* Quote */}
-            <p className="text-gray-300 text-sm leading-relaxed mb-6">
-              "{testimonial.quote}"
-            </p>
-
-            {/* Author */}
-            <div className="flex items-center gap-3 pt-5 border-t border-white/5">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center">
-                <span className="text-white text-sm font-semibold">
-                  {testimonial.author[0]}
-                </span>
-              </div>
-              <div>
-                <p className="text-white font-medium text-sm">{testimonial.author}</p>
-                <p className="text-gray-500 text-xs">{testimonial.role}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-        
-        {/* Spacer for centering on large screens */}
-        <div className="flex-shrink-0 w-0 lg:w-[calc((100vw-1200px)/2)]" />
-      </div>
-      
-      {/* Scroll hint */}
-      <div className="flex justify-center mt-6">
-        <div className="flex items-center gap-2 text-xs text-gray-500">
-          <span>Scroll to see more</span>
-          <span className="text-orange-400">→</span>
+        {/* Marquee track */}
+        <div className="flex animate-marquee hover:[animation-play-state:paused]">
+          {duplicatedTestimonials.map((testimonial, index) => (
+            <TestimonialCard key={index} testimonial={testimonial} />
+          ))}
         </div>
       </div>
     </section>

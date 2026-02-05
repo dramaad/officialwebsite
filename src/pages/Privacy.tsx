@@ -260,15 +260,9 @@ export function Privacy() {
           <div className="bg-white/5 rounded-lg p-6 mt-4">
             <p className="text-gray-300">
               <strong>FlammaLabs Inc.</strong><br />
-              <strong>Email:</strong> privacy@goflamma.ai<br />
-              <strong>Website:</strong> https://goflamma.ai<br />
-              <strong>Address:</strong> San Francisco, CA, United States
+              <strong>Email:</strong> privacy@goflamma.ai
             </p>
           </div>
-          <p className="text-gray-300 leading-relaxed mt-4">
-            For data protection inquiries in the European Union, you may also contact your local data 
-            protection authority.
-          </p>
         </div>
       </main>
 

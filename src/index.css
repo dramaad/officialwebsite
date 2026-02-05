@@ -379,6 +379,43 @@ input:focus-visible {
   outline-offset: 2px;
 }
 
+/* Logo intro particle animation */
+@keyframes float-particle {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-60px) scale(0);
+    opacity: 0;
+  }
+}
+
+.animate-float-particle {
+  animation: float-particle 1.2s ease-out infinite;
+}
+
+/* Marquee animation for testimonials */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,

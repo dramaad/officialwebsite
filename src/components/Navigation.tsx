@@ -36,11 +36,11 @@ export function Navigation({ showLogo }: NavigationProps) {
           {/* Logo */}
           <a 
             href="#" 
-            className={`flex items-center gap-2 transition-all duration-500 ${
+            className={`flex items-center gap-2.5 transition-all duration-500 ${
               showLogo ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
             }`}
           >
-            <img src="/logo.png" alt="Flamma" className="w-7 h-7 object-contain" />
+            <img src="/flamma_logo.svg" alt="Flamma" className="w-9 h-9 object-contain" />
             <span className="font-display font-semibold text-xl text-white">Flamma</span>
           </a>
 
