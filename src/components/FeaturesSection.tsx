@@ -497,8 +497,8 @@ function AutoOptimizeDemo() {
   ];
 
   return (
-    <div className="bg-[#0d0d0d] rounded-xl border border-white/[0.06] p-5 h-full shadow-xl shadow-black/20 flex flex-col min-h-0">
-      <div className="flex gap-4 flex-1 min-h-0">
+    <div className="bg-[#0d0d0d] rounded-xl border border-white/[0.06] p-5 h-full shadow-xl shadow-black/20 flex flex-col min-h-0" style={{ minHeight: 380, height: 380 }}>
+      <div className="flex gap-4 flex-1 min-h-0 overflow-hidden">
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-3">
             <div>
