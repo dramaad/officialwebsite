@@ -16,44 +16,41 @@ export function LogoIntro({ onComplete }: LogoIntroProps) {
   useEffect(() => {
     const tl = gsap.timeline();
 
-    // Phase 1: Ignite - logo reveals from BOTTOM to TOP (flame rises)
+    // Phase 1: Ignite — ~3s total to main page
     tl.set(maskRef.current, { height: '100%' })
       .to(maskRef.current, {
         height: '0%',
-        duration: 1.6,
+        duration: 1.25,
         ease: 'power2.out',
       })
-      // Glow appears only after logo is mostly revealed
       .fromTo(
         glowRef.current,
         { opacity: 0, scale: 0.9 },
-        { opacity: 1, scale: 1.2, duration: 0.7, ease: 'power2.out' },
-        '-=0.35'
+        { opacity: 1, scale: 1.2, duration: 0.5, ease: 'power2.out' },
+        '-=0.3'
       )
-      .to(glowRef.current, { scale: 1, duration: 0.3, ease: 'power2.inOut' })
-      // Text left to right
-      .fromTo(textRef.current, { opacity: 1 }, { opacity: 1, duration: 0 }, '-=0.4')
+      .to(glowRef.current, { scale: 1, duration: 0.2, ease: 'power2.inOut' })
+      .fromTo(textRef.current, { opacity: 1 }, { opacity: 1, duration: 0 }, '-=0.35')
       .fromTo(
         textMaskRef.current,
         { width: '0%' },
-        { width: '100%', duration: 0.8, ease: 'power2.out' },
-        '-=0.4'
+        { width: '100%', duration: 0.5, ease: 'power2.out' },
+        '-=0.35'
       )
-      .to({}, { duration: 0.5 })
-      // Exit: logo flies to top-left
+      .to({}, { duration: 1 })
       .to(
         logoRef.current,
         {
           x: -window.innerWidth / 2 + 80,
           y: -window.innerHeight / 2 + 50,
           scale: 0.25,
-          duration: 0.6,
+          duration: 0.5,
           ease: 'power3.inOut',
         }
       )
-      .to(textRef.current, { opacity: 0, x: -30, duration: 0.3, ease: 'power2.in' }, '-=0.6')
-      .to(glowRef.current, { opacity: 0, duration: 0.4 }, '-=0.5')
-      .to(containerRef.current, { opacity: 0, duration: 0.3, ease: 'power2.inOut' }, '-=0.2')
+      .to(textRef.current, { opacity: 0, x: -30, duration: 0.25, ease: 'power2.in' }, '-=0.5')
+      .to(glowRef.current, { opacity: 0, duration: 0.35 }, '-=0.45')
+      .to(containerRef.current, { opacity: 0, duration: 0.25, ease: 'power2.inOut' }, '-=0.2')
       .add(() => onComplete());
 
     return () => {
