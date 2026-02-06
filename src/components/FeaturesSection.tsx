@@ -220,7 +220,7 @@ function ContentDecodingDemo() {
       const reset = setTimeout(() => {
         setPhase('input');
         setShowMoments(0);
-      }, 8000);
+      }, 5333);
       return () => clearTimeout(reset);
     }
   }, [phase]);
@@ -637,8 +637,8 @@ export function FeaturesSection() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="space-y-20 lg:space-y-32">
           {features.map((feature, index) => (
-            <div key={feature.id} data-feature={index} className={`grid lg:grid-cols-2 gap-8 lg:gap-16 items-center ${index % 2 === 1 ? 'lg:grid-flow-dense' : ''}`}>
-              <div className={index % 2 === 1 ? 'lg:col-start-2' : ''}>
+            <div key={feature.id} data-feature={index} className={`grid lg:grid-cols-2 gap-8 lg:gap-16 items-start ${index % 2 === 1 ? 'lg:grid-flow-dense' : ''}`}>
+              <div className={`${index % 2 === 1 ? 'lg:col-start-2' : ''} min-h-[420px] flex flex-col justify-center`}>
                 <div className="flex items-center gap-3 mb-4">
                   <span className="text-xs font-mono text-orange-400/70">0{index + 1}</span>
                   <div className="h-px flex-1 bg-gradient-to-r from-orange-500/25 to-transparent" />
