@@ -261,15 +261,10 @@ function ContentDecodingDemo() {
         </div>
       </div>
 
-      {/* 2 & 3: Fixed-height slot so layout never jumps — thinking+moments and timeline overlay */}
-      <div className="relative flex-1 min-h-0">
-        {/* AI thinking + High retention moments */}
-        <div
-          className="absolute inset-0 transition-opacity duration-200"
-          style={{ visibility: phase === 'thinking' || phase === 'timeline' ? 'visible' : 'hidden', opacity: phase === 'thinking' || phase === 'timeline' ? 1 : 0 }}
-          aria-hidden={phase !== 'thinking' && phase !== 'timeline'}
-        >
-          <div className="flex items-center gap-2 mb-3">
+      {/* 2. AI thinking + High retention moments — 正常流，不叠层 */}
+      {(phase === 'thinking' || phase === 'timeline') && (
+        <>
+          <div className="flex items-center gap-2 mb-3 flex-shrink-0">
             <div className="w-6 h-6 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
               <Bot className="w-3 h-3 text-orange-400" />
             </div>
@@ -283,7 +278,7 @@ function ContentDecodingDemo() {
               <span className="text-xs text-orange-400">Trimmed 0:12–0:42. Cliffhanger at 0:28.</span>
             )}
           </div>
-          <div className="space-y-1 mb-4">
+          <div className="space-y-1 mb-4 flex-shrink-0">
             <p className="text-[9px] text-gray-500 uppercase tracking-wider mb-1.5">High retention moments</p>
             {moments.map((m, i) => (
               <div
@@ -298,15 +293,12 @@ function ContentDecodingDemo() {
               </div>
             ))}
           </div>
-        </div>
+        </>
+      )}
 
-        {/* 剪映-style multi-track timeline */}
-        <div
-          className="absolute inset-0 overflow-auto transition-opacity duration-200"
-          style={{ visibility: phase === 'timeline' ? 'visible' : 'hidden', opacity: phase === 'timeline' ? 1 : 0 }}
-          aria-hidden={phase !== 'timeline'}
-        >
-          <div className="mb-0">
+      {/* 3. Timeline — 正常流，在 moments 下方 */}
+      {phase === 'timeline' && (
+        <div className="flex-1 min-h-0 overflow-auto">
           <div className="flex justify-between text-[9px] text-gray-500 mb-1">
             <span>00:00</span>
             <span>00:30</span>
@@ -344,8 +336,7 @@ function ContentDecodingDemo() {
             </div>
           </div>
         </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
