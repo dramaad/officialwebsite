@@ -497,23 +497,23 @@ function AutoOptimizeDemo() {
   ];
 
   return (
-    <div className="bg-[#0d0d0d] rounded-xl border border-white/[0.06] p-5 h-full shadow-xl shadow-black/20 flex flex-col min-h-0" style={{ minHeight: 380, height: 380 }}>
-      <div className="flex gap-4 flex-1 min-h-0 overflow-hidden">
+    <div className="bg-[#0d0d0d] rounded-xl border border-white/[0.06] p-6 h-full shadow-xl shadow-black/20 flex flex-col min-h-0" style={{ minHeight: 460, height: 460 }}>
+      <div className="flex gap-5 flex-1 min-h-0 overflow-hidden">
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-4">
             <div>
-              <p className="text-sm font-medium text-white">Campaign Dashboard</p>
-              <p className="text-[10px] text-gray-500">Manage campaigns across channels</p>
+              <p className="text-base font-medium text-white">Campaign Dashboard</p>
+              <p className="text-xs text-gray-500 mt-0.5">Manage campaigns across channels</p>
             </div>
           </div>
 
           {deployProgress < 100 && (
-            <div className="mb-3">
-              <div className="flex items-center gap-2 text-xs text-gray-400 mb-1">
-                <Rocket className="w-3.5 h-3.5 text-orange-400" />
+            <div className="mb-4">
+              <div className="flex items-center gap-2 text-sm text-gray-400 mb-2">
+                <Rocket className="w-4 h-4 text-orange-400" />
                 Deploying...
               </div>
-              <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+              <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                 <div className="h-full bg-orange-500 transition-all duration-100 rounded-full" style={{ width: `${deployProgress}%` }} />
               </div>
             </div>
