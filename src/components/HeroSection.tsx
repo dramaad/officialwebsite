@@ -11,7 +11,7 @@ export function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [riseProgress, setRiseProgress] = useState(0);
 
-  // Horizon rises as user scrolls down (scroll-linked)
+  // 拱形光晕随滚动往上移：前半段滚动就明显升起，位移加大
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
@@ -20,7 +20,9 @@ export function HeroSection() {
       const rect = section.getBoundingClientRect();
       const h = section.offsetHeight;
       if (h <= 0) return;
-      const progress = Math.min(1, Math.max(0, -rect.top / h));
+      // 用约半屏滚动就接近满幅升起，且用 easeOut 让一开始就很明显
+      const raw = Math.min(1, Math.max(0, -rect.top / (h * 0.55)));
+      const progress = 1 - (1 - raw) * (1 - raw);
       setRiseProgress(progress);
     };
 
@@ -90,31 +92,32 @@ export function HeroSection() {
       </video>
       */}
 
-      {/* Dawn / horizon — same orange area as before; rises with scroll */}
+      {/* 拱形光晕 — 随滚动往上移，滚动更敏感、位移更大 */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
           className="absolute left-0 right-0 bottom-0 w-full will-change-transform"
           style={{
-            transform: `translateY(-${riseProgress * 72}%)`,
+            transform: `translateY(-${riseProgress * 95}%)`,
           }}
         >
-          {/* Horizon band — warm light at bottom */}
+          {/* 拱形：底部椭圆光晕，上缘是弧线 */}
           <div
-            className="absolute left-0 right-0 w-full"
+            className="absolute left-1/2 -translate-x-1/2 w-full"
             style={{
-              height: 'min(280px, 28vh)',
+              height: 'min(380px, 42vh)',
               bottom: 0,
-              background: 'linear-gradient(to top, transparent 0%, rgba(254, 109, 4, 0.06) 20%, rgba(254, 109, 4, 0.18) 50%, rgba(254, 109, 4, 0.06) 80%, transparent 100%)',
-              filter: 'blur(40px)',
+              background: 'radial-gradient(ellipse 85% 100% at 50% 100%, rgba(254, 109, 4, 0.18) 0%, rgba(254, 109, 4, 0.08) 35%, rgba(254, 109, 4, 0.02) 60%, transparent 75%)',
+              filter: 'blur(32px)',
             }}
           />
-          {/* Dawn sky glow — soft above horizon */}
+          {/* 拱形上方淡色延展 */}
           <div
-            className="absolute left-0 right-0 bottom-0 w-full"
+            className="absolute left-1/2 -translate-x-1/2 w-full"
             style={{
-              height: '70%',
-              background: 'linear-gradient(to top, rgba(254, 109, 4, 0.03) 0%, rgba(254, 109, 4, 0.01) 40%, transparent 100%)',
-              filter: 'blur(60px)',
+              height: 'min(320px, 36vh)',
+              bottom: 0,
+              background: 'radial-gradient(ellipse 90% 80% at 50% 100%, transparent 45%, rgba(254, 109, 4, 0.04) 70%, transparent 100%)',
+              filter: 'blur(40px)',
             }}
           />
         </div>
