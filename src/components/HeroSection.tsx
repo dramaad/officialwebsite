@@ -71,24 +71,47 @@ export function HeroSection() {
       </video>
       */}
 
-      {/* Dawn / horizon background */}
+      {/* Dawn / horizon background — animated */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Horizon band — warm light at bottom like dawn */}
+        {/* Drifting orbs — visible motion */}
         <div
-          className="absolute left-0 right-0 w-full animate-hero-dawn-horizon pointer-events-none"
+          className="absolute top-1/3 left-1/4 w-[500px] h-[500px] rounded-full animate-hero-dawn-orb"
           style={{
-            height: 'min(280px, 28vh)',
+            background: 'radial-gradient(circle, rgba(254, 109, 4, 0.35) 0%, rgba(254, 109, 4, 0.08) 45%, transparent 70%)',
+            filter: 'blur(70px)',
+          }}
+        />
+        <div
+          className="absolute bottom-1/4 right-1/3 w-[420px] h-[420px] rounded-full animate-hero-dawn-orb-delay"
+          style={{
+            background: 'radial-gradient(circle, rgba(249, 115, 22, 0.3) 0%, transparent 60%)',
+            filter: 'blur(65px)',
+          }}
+        />
+        {/* Rising light band — slow upward sweep */}
+        <div
+          className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[120%] h-[60vh] animate-hero-dawn-rise"
+          style={{
+            background: 'linear-gradient(to top, transparent 0%, rgba(254, 109, 4, 0.08) 30%, rgba(254, 109, 4, 0.02) 70%, transparent 100%)',
+            filter: 'blur(50px)',
+          }}
+        />
+        {/* Horizon band — warm light at bottom, breathes */}
+        <div
+          className="absolute left-0 right-0 w-full animate-hero-dawn-horizon"
+          style={{
+            height: 'min(320px, 32vh)',
             bottom: 0,
-            background: 'linear-gradient(to top, transparent 0%, rgba(254, 109, 4, 0.06) 20%, rgba(254, 109, 4, 0.18) 50%, rgba(254, 109, 4, 0.06) 80%, transparent 100%)',
+            background: 'linear-gradient(to top, transparent 0%, rgba(254, 109, 4, 0.08) 20%, rgba(254, 109, 4, 0.22) 50%, rgba(254, 109, 4, 0.08) 80%, transparent 100%)',
             filter: 'blur(40px)',
           }}
         />
-        {/* Dawn sky glow — soft light above horizon */}
+        {/* Dawn sky glow — soft pulsing above horizon */}
         <div
-          className="absolute left-0 right-0 bottom-0 w-full animate-hero-dawn-sky pointer-events-none"
+          className="absolute left-0 right-0 bottom-0 w-full animate-hero-dawn-sky"
           style={{
             height: '70%',
-            background: 'linear-gradient(to top, rgba(254, 109, 4, 0.03) 0%, rgba(254, 109, 4, 0.01) 40%, transparent 100%)',
+            background: 'linear-gradient(to top, rgba(254, 109, 4, 0.04) 0%, rgba(254, 109, 4, 0.015) 40%, transparent 100%)',
             filter: 'blur(60px)',
           }}
         />
