@@ -188,28 +188,26 @@ function ContentDecodingDemo() {
     { time: '00:48', label: 'CTA' },
   ];
 
-  // Auto flow: show box → cycle examples → thinking + moments → timeline
+  // Auto flow: 1.5x faster loop — input → cycling → thinking → timeline → reset
   useEffect(() => {
     if (phase === 'input') {
-      const t = setTimeout(() => setPhase('cycling'), 600);
+      const t = setTimeout(() => setPhase('cycling'), 400);
       return () => clearTimeout(t);
     }
     if (phase === 'cycling') {
-      const t = setInterval(() => setCycleIndex((i) => (i + 1) % 2), 2800);
-      const done = setTimeout(() => {
-        setPhase('thinking');
-      }, 6000);
+      const t = setInterval(() => setCycleIndex((i) => (i + 1) % 2), 1867);
+      const done = setTimeout(() => setPhase('thinking'), 4000);
       return () => {
         clearInterval(t);
         clearTimeout(done);
       };
     }
     if (phase === 'thinking') {
-      const t = setTimeout(() => setShowMoments(1), 400);
-      const t2 = setTimeout(() => setShowMoments(2), 700);
-      const t3 = setTimeout(() => setShowMoments(3), 1000);
-      const t4 = setTimeout(() => setShowMoments(4), 1300);
-      const toTimeline = setTimeout(() => setPhase('timeline'), 2200);
+      const t = setTimeout(() => setShowMoments(1), 267);
+      const t2 = setTimeout(() => setShowMoments(2), 467);
+      const t3 = setTimeout(() => setShowMoments(3), 667);
+      const t4 = setTimeout(() => setShowMoments(4), 867);
+      const toTimeline = setTimeout(() => setPhase('timeline'), 1467);
       return () => {
         clearTimeout(t);
         clearTimeout(t2);
@@ -222,7 +220,7 @@ function ContentDecodingDemo() {
       const reset = setTimeout(() => {
         setPhase('input');
         setShowMoments(0);
-      }, 12000);
+      }, 8000);
       return () => clearTimeout(reset);
     }
   }, [phase]);
@@ -237,15 +235,16 @@ function ContentDecodingDemo() {
 
   return (
     <div
-      className="bg-[#0d0d0d] rounded-xl border border-white/[0.06] p-5 h-full min-h-[420px] shadow-xl shadow-black/20"
+      className="bg-[#0d0d0d] rounded-xl border border-white/[0.06] p-5 h-full shadow-xl shadow-black/20 flex flex-col"
+      style={{ minHeight: 420, height: 420 }}
       onMouseMove={handleTrackMouse}
       onMouseUp={() => setIsDragging(null)}
       onMouseLeave={() => setIsDragging(null)}
     >
-      <p className="text-[10px] text-gray-500 mb-2">Describe the change. We map it to timeline operations.</p>
+      <p className="text-[10px] text-gray-500 mb-2 flex-shrink-0">Describe the change. We map it to timeline operations.</p>
 
       {/* 1. Dialog box — no user prompt visible; placeholder or cycling example only */}
-      <div className="relative mb-4">
+      <div className="relative mb-4 flex-shrink-0">
         <div className="w-full bg-black border border-white/10 rounded-xl pl-4 pr-11 py-3 text-sm text-white min-h-[48px] flex items-center">
           {phase === 'input' && <span className="text-gray-500">Describe the change...</span>}
           {phase === 'cycling' && (
@@ -262,9 +261,14 @@ function ContentDecodingDemo() {
         </div>
       </div>
 
-      {/* 2. AI thinking + High retention moments (appear in order) */}
-      {(phase === 'thinking' || phase === 'timeline') && (
-        <>
+      {/* 2 & 3: Fixed-height slot so layout never jumps — thinking+moments and timeline overlay */}
+      <div className="relative flex-1 min-h-0">
+        {/* AI thinking + High retention moments */}
+        <div
+          className="absolute inset-0 transition-opacity duration-200"
+          style={{ visibility: phase === 'thinking' || phase === 'timeline' ? 'visible' : 'hidden', opacity: phase === 'thinking' || phase === 'timeline' ? 1 : 0 }}
+          aria-hidden={phase !== 'thinking' && phase !== 'timeline'}
+        >
           <div className="flex items-center gap-2 mb-3">
             <div className="w-6 h-6 rounded-lg bg-orange-500/20 flex items-center justify-center flex-shrink-0">
               <Bot className="w-3 h-3 text-orange-400" />
@@ -284,7 +288,7 @@ function ContentDecodingDemo() {
             {moments.map((m, i) => (
               <div
                 key={i}
-                className={`flex items-center gap-2 py-1.5 px-2 rounded bg-white/[0.02] border border-white/5 transition-all duration-300 ${
+                className={`flex items-center gap-2 py-1.5 px-2 rounded bg-white/[0.02] border border-white/5 transition-all duration-200 ${
                   showMoments > i ? 'opacity-100' : 'opacity-0'
                 }`}
               >
@@ -294,12 +298,15 @@ function ContentDecodingDemo() {
               </div>
             ))}
           </div>
-        </>
-      )}
+        </div>
 
-      {/* 3. 剪映-style multi-track timeline (only when phase === 'timeline') */}
-      {phase === 'timeline' && (
-        <div className="mb-0">
+        {/* 剪映-style multi-track timeline */}
+        <div
+          className="absolute inset-0 overflow-auto transition-opacity duration-200"
+          style={{ visibility: phase === 'timeline' ? 'visible' : 'hidden', opacity: phase === 'timeline' ? 1 : 0 }}
+          aria-hidden={phase !== 'timeline'}
+        >
+          <div className="mb-0">
           <div className="flex justify-between text-[9px] text-gray-500 mb-1">
             <span>00:00</span>
             <span>00:30</span>
@@ -337,7 +344,8 @@ function ContentDecodingDemo() {
             </div>
           </div>
         </div>
-      )}
+        </div>
+      </div>
     </div>
   );
 }
