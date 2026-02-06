@@ -66,6 +66,7 @@ function CreativeRadarDemo() {
         ))}
       </div>
 
+      <div className="min-h-[300px]">
       {activeTab === 'trending' && (
         <>
           <div className="space-y-2 mb-4 max-h-[220px] overflow-y-auto">
@@ -147,6 +148,7 @@ function CreativeRadarDemo() {
           </div>
         </>
       )}
+      </div>
     </div>
   );
 }
