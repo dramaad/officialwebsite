@@ -66,9 +66,14 @@ function CreativeRadarDemo() {
         ))}
       </div>
 
-      <div className="min-h-[300px]">
-      {activeTab === 'trending' && (
-        <>
+      {/* Tab content: all three panels in same slot so height is stable; only active one visible */}
+      <div className="relative min-h-[320px]">
+        {/* Trending Hooks */}
+        <div
+          className="w-full absolute top-0 left-0 right-0 transition-opacity duration-200"
+          style={{ visibility: activeTab === 'trending' ? 'visible' : 'hidden' }}
+          aria-hidden={activeTab !== 'trending'}
+        >
           <div className="space-y-2 mb-4 max-h-[220px] overflow-y-auto">
             {trendingHooks.map((item, i) => (
               <div
@@ -95,32 +100,40 @@ function CreativeRadarDemo() {
             Use similar template
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
-        </>
-      )}
-
-      {activeTab === 'competitors' && (
-        <div className="space-y-2">
-          <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-3 pb-1">Creative strategies</p>
-          {competitors.map((c, i) => (
-            <div key={i} className="p-3 rounded-lg bg-white/[0.02] border border-white/5">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-sm font-medium text-white">{c.tag}</span>
-                <span className="text-[10px] text-orange-400">{c.creatives} new creatives ({c.days})</span>
-              </div>
-              <div className="flex items-center gap-2 text-[10px] text-gray-500 mb-1.5">
-                <span>{c.duration}</span>
-                <span>{c.platforms}</span>
-              </div>
-              <p className="text-[11px] text-gray-500 flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-orange-400/60 flex-shrink-0" /> {c.insight}
-              </p>
-            </div>
-          ))}
         </div>
-      )}
 
-      {activeTab === 'formats' && (
-        <>
+        {/* Competitors — Creative strategies (3 cards, unchanged) */}
+        <div
+          className="w-full absolute top-0 left-0 right-0 transition-opacity duration-200"
+          style={{ visibility: activeTab === 'competitors' ? 'visible' : 'hidden' }}
+          aria-hidden={activeTab !== 'competitors'}
+        >
+          <div className="space-y-2">
+            <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-3 pb-1">Creative strategies</p>
+            {competitors.map((c, i) => (
+              <div key={i} className="p-3 rounded-lg bg-white/[0.02] border border-white/5">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-sm font-medium text-white">{c.tag}</span>
+                  <span className="text-[10px] text-orange-400">{c.creatives} new creatives ({c.days})</span>
+                </div>
+                <div className="flex items-center gap-2 text-[10px] text-gray-500 mb-1.5">
+                  <span>{c.duration}</span>
+                  <span>{c.platforms}</span>
+                </div>
+                <p className="text-[11px] text-gray-500 flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-orange-400/60 flex-shrink-0" /> {c.insight}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Formats */}
+        <div
+          className="w-full absolute top-0 left-0 right-0 transition-opacity duration-200"
+          style={{ visibility: activeTab === 'formats' ? 'visible' : 'hidden' }}
+          aria-hidden={activeTab !== 'formats'}
+        >
           <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-3">Top performing ad formats (last 30 days)</p>
           <div className="space-y-2.5 mb-4">
             {formats.map((f, i) => (
@@ -146,8 +159,7 @@ function CreativeRadarDemo() {
               UGC Reaction and POV Style are showing strongest growth. Consider combining these formats with trending hooks for maximum engagement.
             </p>
           </div>
-        </>
-      )}
+        </div>
       </div>
     </div>
   );
