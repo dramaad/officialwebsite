@@ -71,50 +71,45 @@ export function HeroSection() {
       </video>
       */}
 
-      {/* Animated gradient background - visible presence */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Primary orb - stronger, drifts */}
-        <div 
-          className="absolute top-1/4 left-1/3 w-[700px] h-[700px] rounded-full animate-hero-drift pointer-events-none"
+      {/* Dawn / horizon background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Horizon band — warm light at bottom like dawn */}
+        <div
+          className="absolute left-0 right-0 w-full animate-hero-dawn-horizon pointer-events-none"
           style={{
-            background: 'radial-gradient(circle, rgba(249, 115, 22, 0.9) 0%, rgba(249, 115, 22, 0.2) 40%, transparent 65%)',
-            filter: 'blur(80px)',
+            height: 'min(280px, 28vh)',
+            bottom: 0,
+            background: 'linear-gradient(to top, transparent 0%, rgba(254, 109, 4, 0.06) 20%, rgba(254, 109, 4, 0.18) 50%, rgba(254, 109, 4, 0.06) 80%, transparent 100%)',
+            filter: 'blur(40px)',
           }}
         />
-        <div 
-          className="absolute bottom-1/3 right-1/4 w-[550px] h-[550px] rounded-full animate-hero-drift-delay pointer-events-none"
+        {/* Dawn sky glow — soft light above horizon */}
+        <div
+          className="absolute left-0 right-0 bottom-0 w-full animate-hero-dawn-sky pointer-events-none"
           style={{
-            background: 'radial-gradient(circle, rgba(254, 109, 4, 0.6) 0%, transparent 60%)',
-            filter: 'blur(70px)',
-          }}
-        />
-        {/* Center glow */}
-        <div 
-          className="absolute top-1/2 left-1/2 w-[400px] h-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full animate-pulse-slow pointer-events-none"
-          style={{
-            background: 'radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 70%)',
+            height: '70%',
+            background: 'linear-gradient(to top, rgba(254, 109, 4, 0.03) 0%, rgba(254, 109, 4, 0.01) 40%, transparent 100%)',
             filter: 'blur(60px)',
           }}
         />
-        
-        {/* Grid - more visible */}
-        <div 
-          className="absolute inset-0 opacity-[0.04]"
+        {/* Subtle grid */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)
+              linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)
             `,
             backgroundSize: '64px 64px',
           }}
         />
       </div>
 
-      {/* Vignette - lighter so content stands out */}
-      <div 
+      {/* Vignette */}
+      <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 80% 60% at 50% 50%, transparent 30%, rgba(0,0,0,0.5) 100%)',
+          background: 'radial-gradient(ellipse 80% 60% at 50% 50%, transparent 35%, rgba(0,0,0,0.45) 100%)',
         }}
       />
 

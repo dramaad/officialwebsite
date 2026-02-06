@@ -493,6 +493,35 @@ input:focus-visible {
   animation-delay: -6s;
 }
 
+/* Hero dawn / horizon */
+@keyframes hero-dawn-horizon {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateY(-8%);
+  }
+}
+
+.animate-hero-dawn-horizon {
+  animation: hero-dawn-horizon 12s ease-in-out infinite;
+}
+
+@keyframes hero-dawn-sky {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-hero-dawn-sky {
+  animation: hero-dawn-sky 10s ease-in-out infinite;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,
