@@ -20,7 +20,7 @@ function CreativeRadarDemo() {
     { hook: 'POV: You open the app for the first time', visual: 'POV / first-time reaction', platform: 'Instagram', views: '1.8M', growth: '+280%', uses: '8.9k' },
     { hook: 'Split screen: 1 week later', visual: 'Before vs after (visual)', platform: 'TikTok', views: '1.2M', growth: '+195%', uses: '6.1k' },
     { hook: 'Nobody talks about this...', visual: null, platform: 'TikTok', views: '956K', growth: '+162%', uses: '4.2k' },
-    { hook: 'This changed everything (no words)', visual: 'Pure visual payoff', platform: 'Instagram', views: '890K', growth: '+218%', uses: '5.3k' },
+    { hook: 'This changed everything', visual: 'Pure visual payoff', platform: 'Instagram', views: '890K', growth: '+218%', uses: '5.3k' },
   ];
 
   const competitors = [
@@ -99,7 +99,7 @@ function CreativeRadarDemo() {
 
       {activeTab === 'competitors' && (
         <div className="space-y-2">
-          <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-3 pb-1">Creative strategies (format & insight, no brand names)</p>
+          <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-3 pb-1">Creative strategies</p>
           {competitors.map((c, i) => (
             <div key={i} className="p-3 rounded-lg bg-white/[0.02] border border-white/5">
               <div className="flex items-center justify-between mb-1.5">
@@ -223,7 +223,7 @@ function ContentDecodingDemo() {
 
   return (
     <div
-      className="bg-[#0d0d0d] rounded-xl border border-white/[0.06] p-5 h-full shadow-xl shadow-black/20"
+      className="bg-[#0d0d0d] rounded-xl border border-white/[0.06] p-5 h-full min-h-[420px] shadow-xl shadow-black/20"
       onMouseMove={handleTrackMouse}
       onMouseUp={() => setIsDragging(null)}
       onMouseLeave={() => setIsDragging(null)}
@@ -608,7 +608,7 @@ export function FeaturesSection() {
       <div className="features-header max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
         <div className="text-center">
           <p className="eyebrow mb-4">Core Capabilities</p>
-          <h2 className="headline-section">From Insight to <span className="text-accent-bright">Impact</span></h2>
+          <h2 className="headline-section">Built for Scale, Not Just <span className="text-accent-bright">Creation</span></h2>
           <p className="body-text mt-4 max-w-2xl mx-auto">Four integrated systems that turn market intelligence into deployed campaigns.</p>
         </div>
       </div>
